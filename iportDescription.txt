@@ -1,0 +1,813 @@
+Pleora Technologies Inc.-
+Category: 'Root'
+    Category: 'DeviceControl'
+        Enumeration: 'DeviceScanType'
+Scan type of the sensor of the device.
+            EnumEntry: 'Linescan'
+            EnumEntry: 'Areascan'
+        StringReg: 'DeviceVendorName'
+Name of the manufacturer of the device.
+        StringReg: 'DeviceModelName'
+Model of the device.
+        StringReg: 'DeviceManufacturerInfo'
+Manufacturer information about the device.
+        StringReg: 'DeviceVersion'
+Version of the device.
+        StringReg: 'DeviceID'
+Device`s serial number. This string is a unique identifier of the device.
+        StringReg: 'DeviceUserID'
+User-programmable device identifier.
+        Integer: 'DeviceSFNCVersionMajor'
+Major version of the Standard Features Naming Convention that was used to create the device`s GenICam XML.
+        Integer: 'DeviceSFNCVersionMinor'
+Minor version of the Standard Features Naming Convention that was used to create the device`s GenICam XML.
+        Integer: 'DeviceSFNCVersionSubMinor'
+Sub minor version of Standard Features Naming Convention that was used to create the device`s GenICam XML.
+        Command: 'DeviceReset'
+Resets the device to its power up state.
+        Command: 'DeviceRegistersStreamingStart'
+Prepare the device for registers streaming without checking for consistency.
+        Command: 'DeviceRegistersStreamingEnd'
+Announce the end of registers streaming. This will do a register set validation for consistency and activate it. This will also update the DeviceRegistersValid flag.
+    Category: 'ImageFormatControl'
+        Enumeration: 'SensorDigitizationTaps'
+Number of digitized samples outputted simultaneously by the camera A/D conversion stage.
+            EnumEntry: 'Ten'
+            EnumEntry: 'Eight'
+            EnumEntry: 'Four'
+            EnumEntry: 'Two'
+            EnumEntry: 'One'
+        Integer: 'WidthMax'
+Maximum width of the image (in pixels). The dimension is calculated after horizontal binning, decimation or any other function changing the horizontal dimension of the image.
+        Integer: 'HeightMax'
+Maximum height of the image (in pixels). This dimension is calculated after vertical binning, decimation or any other function changing the vertical dimension of the image HeightMax does not take into account the current Region of interest (Height or OffsetY). Its value must be greater than 0 and less than or equal to SensorHeight (unless an oversampling feature is present).
+        Integer: 'DigitizedImageWidth' (Not available)
+Width of the image provided on the selected pixel bus interface (in pixels).
+        Integer: 'DigitizedImageHeight' (Not available)
+Height of the image provided on the selected pixel bus interface (in pixels)
+        Integer: 'Width'
+Width of the image provided by the device (in pixels).
+        Integer: 'Height'
+Height of the image provided by the device (in pixels).
+        Integer: 'OffsetX'
+Horizontal offset from the origin to the region of interest (in pixels).
+        Integer: 'OffsetY'
+Vertical offset from the origin to the region of interest (in pixels).
+        Enumeration: 'PixelFormat'
+Format of the pixels provided by the device. It represents all the information provided by PixelCoding, PixelSize, PixelColorFilter combined in a single feature.
+            EnumEntry: 'SCF1WGWR12'
+            EnumEntry: 'SCF1WGWR10'
+            EnumEntry: 'SCF1WGWR8'
+            EnumEntry: 'RGB12'
+            EnumEntry: 'RGB10'
+            EnumEntry: 'RGBa8'
+            EnumEntry: 'BGR8'
+            EnumEntry: 'RGB8'
+            EnumEntry: 'BayerBG16'
+            EnumEntry: 'BayerGB16'
+            EnumEntry: 'BayerRG16'
+            EnumEntry: 'BayerGR16'
+            EnumEntry: 'BayerBG12Packed'
+            EnumEntry: 'BayerGB12Packed'
+            EnumEntry: 'BayerRG12Packed'
+            EnumEntry: 'BayerGR12Packed'
+            EnumEntry: 'BayerBG10Packed'
+            EnumEntry: 'BayerGB10Packed'
+            EnumEntry: 'BayerRG10Packed'
+            EnumEntry: 'BayerGR10Packed'
+            EnumEntry: 'BayerBG12'
+            EnumEntry: 'BayerGB12'
+            EnumEntry: 'BayerRG12'
+            EnumEntry: 'BayerGR12'
+            EnumEntry: 'BayerBG10'
+            EnumEntry: 'BayerGB10'
+            EnumEntry: 'BayerRG10'
+            EnumEntry: 'BayerGR10'
+            EnumEntry: 'BayerBG8'
+            EnumEntry: 'BayerGB8'
+            EnumEntry: 'BayerRG8'
+            EnumEntry: 'BayerGR8'
+            EnumEntry: 'Mono16'
+            EnumEntry: 'Mono14'
+            EnumEntry: 'Mono12Packed'
+            EnumEntry: 'Mono12'
+            EnumEntry: 'Mono10Packed'
+            EnumEntry: 'Mono10'
+            EnumEntry: 'Mono8s'
+            EnumEntry: 'Mono8'
+        Enumeration: 'PixelSize'
+Total size in bits of a pixel of the image.
+            EnumEntry: 'Bpp64'
+            EnumEntry: 'Bpp48'
+            EnumEntry: 'Bpp36'
+            EnumEntry: 'Bpp32'
+            EnumEntry: 'Bpp30'
+            EnumEntry: 'Bpp24'
+            EnumEntry: 'Bpp16'
+            EnumEntry: 'Bpp14'
+            EnumEntry: 'Bpp12'
+            EnumEntry: 'Bpp10'
+            EnumEntry: 'Bpp8'
+            EnumEntry: 'Bpp4'
+            EnumEntry: 'Bpp2'
+            EnumEntry: 'Bpp1'
+        Enumeration: 'PixelColorFilter'
+Type of color filter that is applied to the image.
+            EnumEntry: 'BayerBG'
+            EnumEntry: 'BayerGR'
+            EnumEntry: 'BayerGB'
+            EnumEntry: 'BayerRG'
+            EnumEntry: 'None'
+        Enumeration: 'TestPattern'
+Selects the type of test pattern that is generated by the device as image source.
+            EnumEntry: 'iPORTTestPattern'
+            EnumEntry: 'Off'
+    Category: 'AcquisitionControl'
+        Enumeration: 'AcquisitionMode'
+Sets the acquisition mode of the device. It defines mainly the number of frames to capture during an acquisition and the way the acquisition stops.
+            EnumEntry: 'MultiFrame'
+            EnumEntry: 'SingleFrame'
+            EnumEntry: 'Continuous'
+        Command: 'AcquisitionStart'
+Starts the Acquisition of the device. The number of frames captured is specified by AcquisitionMode.
+        Command: 'AcquisitionStop'
+Stops the Acquisition of the device at the end of the current Frame. It is mainly used when AcquisitionMode is Continuous but can be used in any acquisition mode.
+        Integer: 'AcquisitionFrameCount'
+Number of frames to acquire in MultiFrame Acquisition mode.
+        Integer: 'AcquisitionFrameToSkip'
+Controls the number of frame to skip between successively acquired frames.
+    Category: 'DigitalIOControl'
+        Category: 'DigitalIOControlInvisible'
+            Boolean: 'Line0Status'
+            Boolean: 'Line1Status'
+            Boolean: 'Line2Status'
+            Boolean: 'Line3Status'
+        Enumeration: 'LineSelector'
+Selects the physical line (or pin) of the external device connector to configure.
+            EnumEntry: 'GpioOut1'
+            EnumEntry: 'GpioOut0'
+            EnumEntry: 'GpioIn3'
+            EnumEntry: 'GpioIn2'
+            EnumEntry: 'GpioIn1'
+            EnumEntry: 'GpioIn0'
+        Enumeration: 'LineMode'
+Controls if the physical Line is used to Input or Output a signal.
+            EnumEntry: 'Output'
+            EnumEntry: 'Input'
+        Boolean: 'LineStatus'
+Returns the current status of the selected input or output Line.
+        Integer: 'LineStatusAll'
+Returns the current status of all available Line signals at time of polling in a single bitfield.
+        Integer: 'LineDebounceFactor'
+Controls the width of the window during which spurious transitions from input lines are filtered out (in increments of ~480 ns).
+    Category: 'EventControl'
+        Category: 'EventBulk0UpstreamDataData'
+            Integer: 'EventBulk0UpstreamData'
+Returns the unique identifier of the Bulk 0 upstream data event.
+            Integer: 'EventBulk0UpstreamDataTimestamp'
+Returns the timestamp of the Bulk 0 upstream data event.
+            Integer: 'EventBulk0UpstreamDataLength'
+Reports the number of valid bytes available in the Bulk 0 upstream data IRegister.
+        Category: 'EventBulk4UpstreamDataData'
+            Integer: 'EventBulk4UpstreamData'
+Returns the unique identifier of the Bulk 4 upstream data event.
+            Integer: 'EventBulk4UpstreamDataTimestamp'
+Returns the timestamp of the Bulk 4 upstream data event.
+            Integer: 'EventBulk4UpstreamDataLength'
+Reports the number of valid bytes available in the Bulk 4 upstream data IRegister.
+        Category: 'PlcEventQueueData'
+            Integer: 'PlcEventQueue'
+Returns the unique identifier of the PlcEventQueue event.
+            Boolean: 'PlcEventQueueStatusEmpty'
+Returns the not empty status of the PlcEventQueue event upon the occurrence of the event.
+            Boolean: 'PlcEventQueueStatusFull'
+Returns the full status of the PlcEventQueue event upon the occurrence of the event.
+            Boolean: 'PlcEventQueueStatusOverflow'
+Returns the overflow status of the PlcEventQueue event upon the occurrence of the event.
+            Integer: 'PlcEventQueueStatusFillLevel'
+Returns the fill level status of the PlcEventQueue event upon the occurrence of the event.
+            Integer: 'PlcEventQueueTimestamp'
+Returns the timestamp value associated to the occurrence of the PlcEventQueue event.
+            Integer: 'PlcEventQueueLutInputs'
+Returns the state of the PLC LUT inputs causing the PlcEventQueue event.
+            Integer: 'PlcEventQueueEventMask'
+Returns a bitfield indicating the source(s) of the PlcEventQueue event.
+        Enumeration: 'EventSelector'
+Selects which Event to signal to the host application.
+            EnumEntry: 'PlcEventQueue3'
+            EnumEntry: 'PlcEventQueue2'
+            EnumEntry: 'PlcEventQueue1'
+            EnumEntry: 'PlcEventQueue0'
+            EnumEntry: 'Bulk4UpstreamData'
+            EnumEntry: 'Bulk0UpstreamData'
+        Enumeration: 'EventNotification'
+Activate or deactivate the notification to the host application of the occurrence of the selected Event.
+            EnumEntry: 'On'
+            EnumEntry: 'Off'
+    Category: 'TransportLayerControl'
+        Category: 'GigEVision'
+            Integer: 'GevVersionMajor'
+Major version of the specification.
+            Integer: 'GevVersionMinor'
+Minor version of the specification.
+            Boolean: 'GevDeviceModeIsBigEndian'
+Endianess of the device registers.
+            Enumeration: 'GevDeviceClass'
+Returns the class of the device.
+                EnumEntry: 'Peripheral'
+                EnumEntry: 'Transceiver'
+                EnumEntry: 'Receiver'
+                EnumEntry: 'Transmitter'
+            Enumeration: 'GevDeviceModeCharacterSet'
+Character set used by all the strings of the bootstrap registers.
+                EnumEntry: 'UTF8'
+            Enumeration: 'GevPhysicalLinkConfiguration'
+Controls the principal physical link configuration to use on next restart/power-up of the device.
+                EnumEntry: 'SingleLink'
+            Enumeration: 'GevCurrentPhysicalLinkConfiguration'
+Indicates the current physical link configuration of the device.
+                EnumEntry: 'DynamicLAG'
+                EnumEntry: 'StaticLAG'
+                EnumEntry: 'MultiLink'
+                EnumEntry: 'SingleLink'
+            Integer: 'GevActiveLinkCount'
+Indicates the current number of active logical links.
+            Integer: 'GevInterfaceSelector'
+Selects which logical link to control.
+            Integer: 'GevLinkSpeed'
+Indicates the speed of transmission negotiated by the given logical link.
+            Integer: 'GevMACAddress'
+MAC address of the logical link.
+            Enumeration: 'GevSupportedOptionSelector'
+Selects the GEV option to interrogate for existing support.
+                EnumEntry: 'StreamChannel0ExtendedChunkData'
+                EnumEntry: 'StreamChannel0UnconditionalStreaming'
+                EnumEntry: 'StreamChannel0AllInTransmission'
+                EnumEntry: 'StreamChannel0PacketResendDestination'
+                EnumEntry: 'StreamChannel0MultiZone'
+                EnumEntry: 'StreamChannel0BigAndLittleEndian'
+                EnumEntry: 'UserDefinedName'
+                EnumEntry: 'SerialNumber'
+                EnumEntry: 'HeartbeatDisable'
+                EnumEntry: 'LinkSpeed'
+                EnumEntry: 'CCPApplicationSocket'
+                EnumEntry: 'ManifestTable'
+                EnumEntry: 'TestData'
+                EnumEntry: 'DiscoveryAckDelayWritable'
+                EnumEntry: 'DiscoveryAckDelay'
+                EnumEntry: 'ExtendedStatusCodesVersion2_0'
+                EnumEntry: 'ExtendedStatusCodes'
+                EnumEntry: 'PrimaryApplicationSwitchover'
+                EnumEntry: 'ScheduledAction'
+                EnumEntry: 'UnconditionalAction'
+                EnumEntry: 'Action'
+                EnumEntry: 'IEEE1588'
+                EnumEntry: 'PendingAck'
+                EnumEntry: 'EventData'
+                EnumEntry: 'Event'
+                EnumEntry: 'PacketResend'
+                EnumEntry: 'WriteMem'
+                EnumEntry: 'CommandsConcatenation'
+                EnumEntry: 'MessageChannelSourceSocket'
+                EnumEntry: 'StandardIDMode'
+                EnumEntry: 'StreamChannelSourceSocket'
+                EnumEntry: 'IPConfigurationPersistentIP'
+                EnumEntry: 'IPConfigurationDHCP'
+                EnumEntry: 'IPConfigurationLLA'
+                EnumEntry: 'PAUSEFrameGeneration'
+                EnumEntry: 'PAUSEFrameReception'
+                EnumEntry: 'DynamicLAG'
+                EnumEntry: 'StaticLAG'
+                EnumEntry: 'MultiLink'
+                EnumEntry: 'SingleLink'
+            Boolean: 'GevSupportedOption'
+Returns if the selected GEV option is supported.
+            Boolean: 'GevPAUSEFrameReception'
+Controls whether incoming PAUSE Frames are handled on the given logical link.
+            Boolean: 'GevCurrentIPConfigurationLLA'
+Controls whether the Link Local Address IP configuration scheme is activated on the given logical link.
+            Boolean: 'GevCurrentIPConfigurationDHCP'
+Controls whether the DHCP IP configuration scheme is activated on the given logical link.
+            Boolean: 'GevCurrentIPConfigurationPersistentIP'
+Controls whether the PersistentIP configuration scheme is activated on the given logical link.
+            Integer: 'GevCurrentIPAddress'
+Reports the IP address for the given locical link.
+            Integer: 'GevCurrentSubnetMask'
+Reports the subnet mask of the given logical link.
+            Integer: 'GevCurrentDefaultGateway'
+Reports the default gateway IP address to be used on the given logical link.
+            Enumeration: 'GevIPConfigurationStatus'
+Reports the current IP configuration status.
+                EnumEntry: 'ForceIP'
+                EnumEntry: 'LLA'
+                EnumEntry: 'DHCP'
+                EnumEntry: 'PersistentIP'
+                EnumEntry: 'None'
+            StringReg: 'GevFirstURL'
+Indicates the first URL to the GenICam XML device description file. The First URL is used as the first choice by the application to retrieve the GenICam XML device description file.
+            StringReg: 'GevSecondURL'
+Indicates the second URL to the GenICam XML device description file. This URL is an alternative if the application was unsuccessful to retrieve the device description file using the first URL.
+            Integer: 'GevNumberOfInterfaces'
+Indicates the number of logical links supported by this device.
+            Integer: 'GevPersistentIPAddress'
+Controls the Persistent IP address for this logical link. It is only used when the device boots with the Persistent IP configuration scheme.
+            Integer: 'GevPersistentSubnetMask'
+Controls the Persistent subnet mask associated with the Persistent IP address on this logical link.
+            Integer: 'GevPersistentDefaultGateway'
+Controls the persistent default gateway for this logical link. It is only used when the device boots with the Persistent IP configuration scheme.
+            Integer: 'GevMessageChannelCount'
+Indicates the number of message channels supported by this device.
+            Integer: 'GevStreamChannelCount'
+Indicates the number of stream channels supported by this device.
+            Integer: 'GevHeartbeatTimeout'
+Controls the current heartbeat timeout in milliseconds.
+            Integer: 'GevTimestampTickFrequency'
+Indicates the number of timestamp ticks in 1 second (frequency in Hz). If IEEE 1588 is used, this feature must return 1,000,000,000 (1 GHz).
+            Command: 'GevTimestampControlLatch'
+Latches the current timestamp counter into GevTimestampValue.
+            Command: 'GevTimestampControlReset'
+Resets the timestamp counter to 0. This feature is not available or as no effect when IEEE 1588 is used.
+            Integer: 'GevTimestampValue'
+Returns the latched 64-bit value of the timestamp counter.
+            Boolean: 'GevIEEE1588'
+Enables the IEEE 1588 Precision Time Protocol to control the timestamp register.
+            Enumeration: 'GevIEEE1588ClockAccuracy'
+Indicates the expected accuracy of the device clock when it is the grandmaster, or in the event it becomes the grandmaster.
+                EnumEntry: 'Unknown'
+            Enumeration: 'GevIEEE1588Status'
+Provides the state of the IEEE 1588 clock.
+                EnumEntry: 'Slave'
+                EnumEntry: 'Uncalibrated'
+                EnumEntry: 'Passive'
+                EnumEntry: 'Master'
+                EnumEntry: 'PreMaster'
+                EnumEntry: 'Listening'
+                EnumEntry: 'Disabled'
+                EnumEntry: 'Faulty'
+                EnumEntry: 'Initializing'
+            Enumeration: 'GevGVCPExtendedStatusCodesSelector'
+Selects the GigE Vision version to control extended status codes for.
+                EnumEntry: 'Version1_1'
+            Boolean: 'GevGVCPExtendedStatusCodes'
+Enables the generation of extended status codes.
+            Boolean: 'GevGVCPPendingAck'
+Enables the generation of PENDING_ACK.
+            Integer: 'GevGVCPPendingTimeout'
+Indicates the longest GVCP command execution time (ms) before a device returns a PENDING_ACK.
+            Enumeration: 'GevGVSPExtendedIDMode'
+Enables the extended IDs mode.
+                EnumEntry: 'On'
+                EnumEntry: 'Off'
+            Enumeration: 'GevCCP'
+Controls the device access privilege of an application.
+                EnumEntry: 'ControlAccess'
+                EnumEntry: 'ExclusiveAccess'
+                EnumEntry: 'OpenAccess'
+            Integer: 'GevPrimaryApplicationSocket'
+Returns the UDP source port of the primary application.
+            Integer: 'GevPrimaryApplicationIPAddress'
+Returns the address of the primary application.
+            Integer: 'GevMCPHostPort'
+Controls the port to which the device must send messages. Setting this value to 0 closes the message channel.
+            Integer: 'GevMCDA'
+Controls the destination IP address for the message channel.
+            Integer: 'GevMCTT'
+Provides the transmission timeout value in milliseconds.
+            Integer: 'GevMCRC'
+Controls the number of retransmissions allowed when a message channel message times out.
+            Integer: 'GevMCSP'
+This feature indicates the source port for the message channel.
+            Integer: 'GevStreamChannelSelector'
+Selects the stream channel to control.
+            Boolean: 'GevSCCFGUnconditionalStreaming'
+Enables the camera to continue to stream, for this stream channel, if its control channel is closed or regardless of the reception of any ICMP messages (such as destination unreachable messages).
+            Enumeration: 'GevSCPDirection'
+Reports the direction of the stream channel.
+                EnumEntry: 'Receiver'
+                EnumEntry: 'Transmitter'
+            Integer: 'GevSCPInterfaceIndex'
+Index of the logical link to use.
+            Integer: 'GevSCPHostPort'
+Controls the port of the selected channel to which a GVSP transmitter must send data stream or the port from which a GVSP receiver may receive data stream. Setting this value to 0 closes the stream channel.
+            Boolean: 'GevSCPSFireTestPacket'
+Sends a test packet. When this feature is set, the device will fire one test packet.
+            Boolean: 'GevSCPSDoNotFragment'
+The state of this feature is copied into the "do not fragment" bit of IP header of each stream packet. It can be used by the application to prevent IP fragmentation of packets on the stream channel.
+            Boolean: 'GevSCPSBigEndian'
+Endianess of multi-byte pixel data for this stream.
+            Integer: 'GevSCPSPacketSize'
+Specifies the stream packet size, in bytes, to send on the selected channel for a GVSP transmitter or specifies the maximum packet size supported by a GVSP receiver.
+            Integer: 'GevSCPD'
+Controls the delay (in timestamp counter unit) to insert between each packet for this stream channel. This can be used as a crude flow-control mechanism if the application or the network infrastructure cannot keep up with the packets coming from the device.
+            Integer: 'GevSCDA'
+Controls the destination IP address of the selected stream channel to which a GVSP transmitter must send data stream or the destination IP address from which a GVSP receiver may receive data stream.
+            Integer: 'GevSCSP'
+Indicates the source port of the stream channel.
+            Integer: 'GevStreamThroughputLimit'
+Limits the peak bit rate in Mbps to be streamed out on the selected stream channel. The GevSCPD value will be calculated based on the value of GevStreamThroughputLimit and vice versa.
+        Integer: 'PayloadSize'
+Provides the number of bytes transferred for each image or chunk on the stream channel. This includes any end-of-line, end-of-frame statistics or other stamp data. This is the total size of data payload for a data block.
+        Enumeration: 'DeviceTapGeometry'
+This device tap geometry feature describes the geometrical properties characterizing the taps of a camera as presented at the output of the device.
+            EnumEntry: 'Geometry_1X10' (Not available)
+            EnumEntry: 'Geometry_1X10_1Y' (Not available)
+            EnumEntry: 'Geometry_1X8' (Not available)
+            EnumEntry: 'Geometry_1X8_1Y' (Not available)
+            EnumEntry: 'Geometry_2X2E' (Not available)
+            EnumEntry: 'Geometry_1X4' (Not available)
+            EnumEntry: 'Geometry_1X4_1Y' (Not available)
+            EnumEntry: 'Geometry_1X2' (Not available)
+            EnumEntry: 'Geometry_1X' (Not available)
+            EnumEntry: 'Geometry_1X2_1Y' (Not available)
+            EnumEntry: 'Geometry_1X_1Y'
+    Category: 'UserSetControl'
+        Enumeration: 'UserSetSelector'
+Selects the feature User Set to load, save or configure.
+            EnumEntry: 'UserSet1'
+            EnumEntry: 'Default'
+        Command: 'UserSetLoad'
+Loads the User Set specified by UserSetSelector to the device and makes it active.
+        Command: 'UserSetSave' (Not available)
+Save the User Set specified by UserSetSelector to the non-volatile memory of the device.
+        Enumeration: 'UserSetDefault'
+Selects the feature User Set to load and make active by default when the device is reset.
+            EnumEntry: 'UserSet1' (Not available)
+            EnumEntry: 'Default'
+        Enumeration: 'UserSetLoadLastUserSet'
+Reports the last user set executed by the device from a user set load command, or as a result of a device reset.
+            EnumEntry: 'UserSet1'
+            EnumEntry: 'Default'
+        Enumeration: 'UserSetLoadStatus'
+Reports the status of the last user set load executed by the device.
+            EnumEntry: 'Success'
+            EnumEntry: 'Failure'
+            EnumEntry: 'InProgress'
+    Category: 'ChunkDataControl'
+        Category: 'ChunkTestPattern'
+            Integer: 'TestPatternWidth'
+Returns the width of test pattern image.
+            Integer: 'TestPatternHeight'
+Returns the height of test pattern image.
+            Enumeration: 'TestPatternType'
+Returns test pattern type.
+                EnumEntry: 'PleoraMovingRamp'
+            Integer: 'TestPatternImageFirstPixelValue'
+Returns the image first pixel value
+            Integer: 'TestPatternChunkID'
+Returns test pattern chunk ID.
+            Integer: 'TestPatternChunkLength'
+Returns test pattern chunk length.
+        Boolean: 'ChunkModeActive'
+Activates the inclusion of Chunk data in the payload of the image.
+        Enumeration: 'ChunkSelector'
+Selects which Chunk to enable or control.
+            EnumEntry: 'PixelBus0Metadata'
+            EnumEntry: 'Counter1Value'
+            EnumEntry: 'Counter0Value'
+            EnumEntry: 'PlcLutInputValue'
+        Boolean: 'ChunkEnable'
+Enables the inclusion of the selected Chunk data in the payload of the image.
+        Integer: 'ChunkPixelBusMetadataTotalLengthMax'
+Reports the expected maximum total length of all metadata acquired on the pixel bus, including all metadata and chunk tags (CID and length field).
+        Integer: 'ChunkPlcLutInputValue'
+Returns value of the 8-bit PLC LUT inputs. Bit 0 maps to the PLC LUT input 0 and bit 7 maps to the PLC LUT input 7.
+        Integer: 'ChunkCounter0Value'
+Returns the value of PLC Counter 0.
+        Integer: 'ChunkCounter1Value'
+Returns the value of PLC Counter 1.
+    Category: 'ActionControl'
+        Enumeration: 'ActionUnconditionalMode'
+Enables the unconditional action command mode where action commands are processed even when the primary control channel is closed.
+            EnumEntry: 'On'
+            EnumEntry: 'Off'
+        Integer: 'ActionDeviceKey'
+Provides the device key that allows the device to check the validity of action commands. The device internal assertion of an action signal is only authorized if the ActionDeviceKey and the action device key value in the protocol message are equal.
+        Integer: 'ActionQueueSize'
+Indicates the size of the scheduled action commands queue. This number represents the maximum number of scheduled action commands that can be pending at a given point in time.
+        Enumeration: 'ActionSelector'
+Selects to which Action Signal further Action settings apply.
+            EnumEntry: 'ActionTrig0PulseTrig1Pulse'
+            EnumEntry: 'ActionTrig0PulseTrig1SetOne'
+            EnumEntry: 'ActionTrig0SetOneTrig1Pulse'
+            EnumEntry: 'ActionTrig0PulseTrig1SetZero'
+            EnumEntry: 'ActionTrig0SetZeroTrig1Pulse'
+            EnumEntry: 'ActionTrig0SetOneTrig1SetOne'
+            EnumEntry: 'ActionTrig0SetOneTrig1SetZero'
+            EnumEntry: 'ActionTrig0SetZeroTrig1SetOne'
+            EnumEntry: 'ActionTrig0SetZeroTrig1SetZero'
+            EnumEntry: 'ActionTrig1Pulse'
+            EnumEntry: 'ActionTrig1SetOne'
+            EnumEntry: 'ActionTrig1SetZero'
+            EnumEntry: 'ActionTrig0Pulse'
+            EnumEntry: 'ActionTrig0SetOne'
+            EnumEntry: 'ActionTrig0SetZero'
+        Integer: 'ActionGroupMask'
+Provides the mask that the device will use to validate the action on reception of the action protocol message.
+        Integer: 'ActionGroupKey'
+Provides the key that the device will use to validate the action on reception of the action protocol message.
+        Command: 'PlcActionTrigQueueFlush'
+Flushes the PLC action trigger queue.
+        Boolean: 'PlcActionTrigQueueFull'
+Indicates whether the PLC action trigger queue is full or not.
+        Boolean: 'PlcActionTrigQueueEmpty'
+Indicates whether the PLC action trigger queue is empty or not.
+    Category: 'PixelBusInterfaceControl'
+        Boolean: 'PixelBusDataValidEnabled'
+Controls whether the Video Interface uses the DVAL signal.
+        Enumeration: 'PixelBusDataValidPolarity'
+Controls whether the Video Interface considers the DVAL signal active when DVAL is low or high.
+            EnumEntry: 'Low'
+            EnumEntry: 'High'
+        Enumeration: 'PixelBusLineValidPolarity'
+Controls whether the Video Interface considers the LVAL signal active when LVAL is low or high.
+            EnumEntry: 'Low'
+            EnumEntry: 'High'
+        Enumeration: 'PixelBusFrameValidPolarity'
+Controls whether the Video Interface considers the FVAL signal active when FVAL is low or high.
+            EnumEntry: 'Low'
+            EnumEntry: 'High'
+        Enumeration: 'PixelBusMetadataValidPolarity'
+Controls whether the Video Interface considers its grabber input MVAL signal active when MVAL is low or high.
+            EnumEntry: 'Low'
+            EnumEntry: 'High'
+        Enumeration: 'PixelBusLineValidEdgeSensitivity'
+Controls whether the Video Interface is sensitive to the edge of LVAL or the level LVAL.
+            EnumEntry: 'Edge'
+            EnumEntry: 'Level'
+        Enumeration: 'PixelBusFrameValidEdgeSensitivity'
+Controls whether the Video Interface is sensitive to the edge of FVAL or the level FVAL.
+            EnumEntry: 'Edge'
+            EnumEntry: 'Level'
+        Enumeration: 'PixelBusLineValidFunctionSelect'
+Selects the combinational function feeding the grabber input LVAL.
+            EnumEntry: 'Pb0LvalAndPb0Dval'
+            EnumEntry: 'Pb0LvalOrPb0Spare'
+            EnumEntry: 'Pb0LvalAndPb0Spare'
+            EnumEntry: 'PlcLval0'
+            EnumEntry: 'Pb0LvalOrPlcLval0'
+            EnumEntry: 'Pb0LvalAndPlcLval0'
+            EnumEntry: 'Pb0Lval'
+        Enumeration: 'PixelBusFrameValidFunctionSelect'
+Selects the combinational function feeding the grabber input FVAL.
+            EnumEntry: 'Pb0FvalOrPb0Spare'
+            EnumEntry: 'Pb0FvalAndPb0Spare'
+            EnumEntry: 'PlcFval0'
+            EnumEntry: 'Pb0FvalOrPlcFval0'
+            EnumEntry: 'Pb0FvalAndPlcFval0'
+            EnumEntry: 'Pb0Fval'
+        Enumeration: 'PixelBusMetadataValidFunctionSelect'
+Selects the combinational function feeding the grabber input MVAL.
+            EnumEntry: 'Pb0LvalOrPlcMval0'
+            EnumEntry: 'Pb0LvalAndPlcMval0'
+            EnumEntry: 'Pb0SpareOrPlcMval0'
+            EnumEntry: 'Pb0SpareAndPlcMval0'
+            EnumEntry: 'Pb0Spare'
+        Boolean: 'PixelBusClockPresent'
+Indicates whether the Video Interface detects the presence of the pixel bus clock.
+    Category: 'PortCommunication'
+        Enumeration: 'BulkSelector'
+Selects which Bulk interface to configure.
+            EnumEntry: 'Bulk4'
+            EnumEntry: 'Bulk0'
+        Enumeration: 'BulkMode'
+Selects the serial communication mode to use.
+            EnumEntry: 'UART'
+        Enumeration: 'BulkBaudRate'
+Defines the Baud rate of the UART serial communication link. When set to Programmable, the Baud rate is defined according to the BulkBaudRateFactor feature.
+            EnumEntry: 'Programmable'
+            EnumEntry: 'Baud115200'
+            EnumEntry: 'Baud57600'
+            EnumEntry: 'Baud38400'
+            EnumEntry: 'Baud28800'
+            EnumEntry: 'Baud19200'
+            EnumEntry: 'Baud14400'
+            EnumEntry: 'Baud9600'
+        Integer: 'BulkBaudRateFactor' (Not available)
+Enables the programming of user defined baud rates. The actual baud rate is provided by the BulkBaudRateValue feature.
+        Float: 'BulkBaudRateValue' (Not available)
+Represents the actual baud rate computed from the BulkBaudRateFactor feature.
+        Boolean: 'BulkLoopback'
+Enables the loopback of downstream transmitted data in the upstream direction.
+        Enumeration: 'BulkNumOfStopBits'
+Controls the number of stop bits for the serial communication interface.
+            EnumEntry: 'Two'
+            EnumEntry: 'One'
+        Enumeration: 'BulkParity'
+Controls the parity for the serial communication interface.
+            EnumEntry: 'Odd'
+            EnumEntry: 'Even'
+            EnumEntry: 'None'
+        Integer: 'BulkUpstreamFifoWatermark'
+Controls the number of bytes to accumulate in the Bulk interface upstream FIFO before the Video Interface delivers them on the Ethernet network using a GigE Vision event.
+        Float: 'BulkUpstreamRxTimeout'
+Sets the Bulk upstream receive timeout counter. The timeout counter is also set to this value when a byte is written to or pulled off the Bulk upstream FIFO. When different than 0, the counter decrements by one every system clock cycle until it reaches 0. Bytes present in the FIFO are delivered to the application when the timeout occurs.
+    Category: 'iPORTEngine'
+        Category: 'Plc'
+            Category: 'Counter'
+                Enumeration: 'CounterSelector'
+Selects which Counter to configure.
+                    EnumEntry: 'Counter1'
+                    EnumEntry: 'Counter0'
+                Enumeration: 'CounterResetActivation'
+Selects the Activation mode of the Counter Reset Source signal.
+                    EnumEntry: 'LevelLow'
+                    EnumEntry: 'LevelHigh'
+                    EnumEntry: 'AnyEdge'
+                    EnumEntry: 'FallingEdge'
+                    EnumEntry: 'RisingEdge'
+                    EnumEntry: 'Off'
+                Integer: 'CounterValue'
+Reads or writes the current value of the selected Counter.
+                Integer: 'CounterDuration'
+Sets the duration (or number of events) before the CounterEnd event is generated.
+                Enumeration: 'CounterIncrementEventActivation'
+Selects the event that increments the selected counter.
+                    EnumEntry: 'LevelLow'
+                    EnumEntry: 'LevelHigh'
+                    EnumEntry: 'AnyEdge'
+                    EnumEntry: 'FallingEdge'
+                    EnumEntry: 'RisingEdge'
+                    EnumEntry: 'Off'
+                Enumeration: 'CounterDecrementEventActivation'
+Selects the event that decrements the selected counter.
+                    EnumEntry: 'LevelLow'
+                    EnumEntry: 'LevelHigh'
+                    EnumEntry: 'AnyEdge'
+                    EnumEntry: 'FallingEdge'
+                    EnumEntry: 'RisingEdge'
+                    EnumEntry: 'Off'
+            Category: 'Timer'
+                Enumeration: 'TimerSelector'
+Selects which Timer to configure.
+                    EnumEntry: 'Timer1'
+                    EnumEntry: 'Timer0'
+                Integer: 'TimerDurationRaw'
+It sets the duration in device-specific unit of the Timer pulse.
+                Integer: 'TimerDelayRaw'
+It sets the duration in device-specific unit of the delay to apply after the reception of a trigger before to start the Timer.
+                Enumeration: 'TimerTriggerSource'
+Selects the source of the trigger to start the Timer.
+                    EnumEntry: 'Continuous'
+                    EnumEntry: 'TriggerInput'
+                Enumeration: 'TimerTriggerActivation'
+Selects the activation mode of the trigger to start the Timer.
+                    EnumEntry: 'LevelLow'
+                    EnumEntry: 'AnyEdge'
+                    EnumEntry: 'FallingEdge'
+                    EnumEntry: 'LevelHigh'
+                    EnumEntry: 'RisingEdge'
+                Enumeration: 'TimerGranularityFactor'
+Controls the granularity of the TimerDurationRaw and TimerDelayRaw features.
+                    EnumEntry: 'Granularity1p96608ms'
+                    EnumEntry: 'Granularity245p76us'
+                    EnumEntry: 'Granularity30p72us'
+                    EnumEntry: 'Granularity7p68us'
+                    EnumEntry: 'Granularity1p92us'
+                    EnumEntry: 'Granularity480ns'
+                    EnumEntry: 'Granularity120ns'
+                    EnumEntry: 'Granularity30ns'
+                Float: 'TimerPeriod'
+Returns the period, in ns, of the selected timer.
+                Float: 'TimerFrequency'
+Returns the frequency, in Hertz, of the selected timer.
+            Category: 'TimestampControl'
+                Enumeration: 'TimestampResetActivation'
+Enables the PLC to reset the free-running timestamp.
+                    EnumEntry: 'PlcTimestampCtrlRisingEdge'
+                    EnumEntry: 'OnApply' (Not available)
+                    EnumEntry: 'Disabled'
+            Category: 'SignalRouting'
+                Command: 'PlcEquationApply'
+Command to execute the evaluation of equations.
+                StringReg: 'PlcEquationStatus'
+Displays the status of equations after PlcEquationApply is executed or an equation is updated.
+                StringReg: 'PlcEquation0'
+Programs the logical equation for the output 0 of the PLC lookup table.
+                StringReg: 'PlcEquation1'
+Programs the logical equation for the output 1 of the PLC lookup table.
+                StringReg: 'PlcEquation2'
+Programs the logical equation for the output 2 of the PLC lookup table.
+                StringReg: 'PlcEquation3'
+Programs the logical equation for the output 3 of the PLC lookup table.
+                StringReg: 'PlcEquation4'
+Programs the logical equation for the output 4 of the PLC lookup table.
+                StringReg: 'PlcEquation5'
+Programs the logical equation for the output 5 of the PLC lookup table.
+                StringReg: 'PlcEquation6'
+Programs the logical equation for the output 6 of the PLC lookup table.
+                StringReg: 'PlcEquation7'
+Programs the logical equation for the output 7 of the PLC lookup table.
+                StringReg: 'PlcEquation8'
+Programs the logical equation for the output 8 of the PLC lookup table.
+                StringReg: 'PlcEquation9'
+Programs the logical equation for the output 9 of the PLC lookup table.
+                StringReg: 'PlcEquation10'
+Programs the logical equation for the output 10 of the PLC lookup table.
+                StringReg: 'PlcEquation11'
+Programs the logical equation for the output 11 of the PLC lookup table.
+                StringReg: 'PlcEquation12'
+Programs the logical equation for the output 12 of the PLC lookup table.
+                StringReg: 'PlcEquation13'
+Programs the logical equation for the output 13 of the PLC lookup table.
+                StringReg: 'PlcEquation14'
+Programs the logical equation for the output 14 of the PLC lookup table.
+                StringReg: 'PlcLutInput0'
+Indicates which signal is routed to the LUT input 0.
+                StringReg: 'PlcLutInput1'
+Indicates which signal is routed to the LUT input 1.
+                StringReg: 'PlcLutInput2'
+Indicates which signal is routed to the LUT input 2.
+                StringReg: 'PlcLutInput3'
+Indicates which signal is routed to the LUT input 3.
+                StringReg: 'PlcLutInput4'
+Indicates which signal is routed to the LUT input 4.
+                StringReg: 'PlcLutInput5'
+Indicates which signal is routed to the LUT input 5.
+                StringReg: 'PlcLutInput6'
+Indicates which signal is routed to the LUT input 6.
+                StringReg: 'PlcLutInput7'
+Indicates which signal is routed to the LUT input 7.
+            Category: 'ControlBits'
+                Enumeration: 'PlcCtrlSelector'
+Selects the PLC software controlled bits.
+                    EnumEntry: 'PlcCtrl3'
+                    EnumEntry: 'PlcCtrl2'
+                    EnumEntry: 'PlcCtrl1'
+                    EnumEntry: 'PlcCtrl0'
+                Boolean: 'PlcCtrlValue'
+Sets the selected PLC software controlled bit.
+                Integer: 'PlcCtrlValueAllMask'
+Sets the write mask to apply to the value specified by PlcCtrlValueAll before writing it in the PlcCtrlValueAll. If the PlcCtrlValueAllMask feature is present, setting the PlcCtrlValueAll will only change the bits that have a corresponding bit in the mask set to one.
+                Integer: 'PlcCtrlValueAll'
+Sets the bits of the Control Value register. It is subject to the PlcCtrlValueAllMask.
+            Category: 'Rescaler'
+                Enumeration: 'PlcRescalerGranularityFactor'
+Controls the duration between samples, measured in system clock cycles (~30 ns).
+                    EnumEntry: 'Granularity7p68us'
+                    EnumEntry: 'Granularity480ns'
+                    EnumEntry: 'Granularity120ns'
+                    EnumEntry: 'Granularity30ns'
+                Enumeration: 'PlcRescalerFreqMultiplier'
+Sets the multiplier controlling the frequency of the rescaler output signal.
+                    EnumEntry: 'FrequencyX4096'
+                    EnumEntry: 'FrequencyX16'
+                    EnumEntry: 'FrequencyX256'
+                Integer: 'PlcRescalerFreqDivider'
+Sets the divisor controlling the frequency of the rescaler output signal.
+                Boolean: 'PlcRescalerBackupEnabled'
+Controls whether the rescaler switches to the backup input signal if the input signal stops. The backup input signal is not rescaled.
+                Integer: 'PlcRescalerBackupSwitchoverDelay'
+Controls the duration of the delay to switchover, in increments of ~480 ns. If the rescaler detects no rising edge transition of the input signal during this switchover delay, it switches to the backup signal. When a rising edge transition is detected on the input signal, the rescaler switches back to the input signal.
+                Enumeration: 'PlcRescalerBackupInputSignal'
+Selects the replacement signal if the input signal stops.
+                    EnumEntry: 'Timer1Out'
+                    EnumEntry: 'Timer0Out'
+                Float: 'PlcRescalerInputFrequency'
+Returns the frequency, in Hertz, of the selected input signal.
+                Float: 'PlcRescalerOutputFrequency'
+Returns the frequency, in Hertz, of the output from the rescaler.
+            Category: 'Delayer'
+                Integer: 'PlcDelayerDelayCount'
+Controls the amount of time by which the delayer output signal will be delayed from the input signal.
+                Enumeration: 'PlcDelayerReferenceTimingSignal'
+Selects the reference signal that measures how much to delay the input signal. The period of the reference signal determines both the rate at which the delayer samples the input and the duration of a delay count of 1.
+                    EnumEntry: 'Timer1Out'
+                    EnumEntry: 'Timer0Out'
+                    EnumEntry: 'PlcRescalerOut'
+        Category: 'Grabber'
+            Category: 'TriggerConfiguration'
+                Boolean: 'GrabberPlcTriggerable'
+Determines whether a PLC output is used to trigger the acquisition of a frame. When enabled, this is the Video Interface that is triggered, not the camera head.
+                Enumeration: 'AcquisitionPipeBlockCount'
+Controls the number of blocks that can be in the acquisition pipe for the AcquisitionMode set to Continuous or Multiframe.
+                    EnumEntry: 'LimitedByOnBoardMemory'
+                    EnumEntry: 'Two'
+                    EnumEntry: 'One'
+        Enumeration: 'FpgaLicenseStatus'
+Reports the status of the authorization process on the device.
+            EnumEntry: 'Valid'
+            EnumEntry: 'Invalid'
+    Category: 'CameraLinkInterfaceControl'
+        Enumeration: 'ClConnectorSelector'
+Selects the Camera Link interface to configure.
+            EnumEntry: 'Connector2'
+            EnumEntry: 'Connector1'
+        Boolean: 'ClSafePowerActive'
+Controls whether the SafePower protocol is active. SafePower is a protocol to prevent the Video Interface from attempting to supply power to a conventional (non PoCL) cable or camera. When set to True, SafePower is enabled on the Video Interface. When set to False, SafePower is disabled i.e. the Video Interface behaves like in a conventional Camera Link system. In this case, the Video Interface does not attempt to supply power to a Camera Link connector/camera pair for the selected Camera Link interface. The inner shield lines of the associated Camera Link connector are tied to digital ground in the Video Interface.
+        Enumeration: 'ClSafePowerStatus' (Not available)
+Reports the status of the SafePower controller. When set to Initializing, PoCL camera and cable detection has not started yet. When set to PoClSensing, the controller senses if a PoCL camera and cable are connected. When set to PoClCameraAndCableDetected, the controller detected a PoCL camera and cable but the presence of a clock has not been detected yet. When set to PoClLinkUp, a clock has been detected on a PoCL camera and cable pair. When set to NonPoClCameraOrCableDetected, the controller detected a non-PoCL camera or cable but the presence of a clock has not been detected yet. When set to NonPoClLinkUp, a clock has been detected on a non-PoCL camera and cable pair. In normal operation with a connected camera, this feature should report PoClLinkUp or NonPoClLinkUp.
+            EnumEntry: 'NonPoClLinkUp'
+            EnumEntry: 'NonPoClCameraOrCableDetected'
+            EnumEntry: 'PoClLinkUp'
+            EnumEntry: 'PoClCameraAndCableDetected'
+            EnumEntry: 'PoClSensing'
+            EnumEntry: 'Initializing'
+        Enumeration: 'ClConfiguration'
+This Camera Link specific feature describes the configuration used by the camera. It helps especially when a camera is capable of operation in a non-standard configuration, and when the features PixelSize, SensorDigitizationTaps, and DeviceTapGeometry do not provide enough information for interpretation of the image data provided by the camera.
+            EnumEntry: 'DualMedium'
+            EnumEntry: 'EightyBit'
+            EnumEntry: 'Full'
+            EnumEntry: 'Medium'
+            EnumEntry: 'Base'
+    Category: 'TLParamsLockedCategory'
+        Integer: 'TLParamsLocked'
