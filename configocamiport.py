@@ -108,7 +108,7 @@ print camNames
 while len(camNames)%4!=0:
     camNames+="\0"
 namelen=len(camNames)
-cameraParams=numpy.zeros((6*ncam+3+(namelen+3)//4,),numpy.int32)
+cameraParams=numpy.zeros((7*ncam+3+(namelen+3)//4,),numpy.int32)
 cameraParams[0:ncam]=8#8 bpp
 cameraParams[ncam:2*ncam]=65536#block size
 cameraParams[2*ncam:3*ncam]=0#x offset
