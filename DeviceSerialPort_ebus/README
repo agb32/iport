@@ -1,6 +1,7 @@
 Modified DeviceSerialPort.cpp, and made a Makefile.
 
 To run DeviceSerialPort, you need to do something like:
+NO NO NO... 
 export GENICAM_ROOT=/opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/
 export GENICAM_ROOT_V2_4=/opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/
 sudo mkdir /opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/xml
@@ -8,3 +9,9 @@ sudo touch /opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/xml/CommunicationGEV.xml
 sudo touch /opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/xml/CommunicationU3V.xml
 sudo touch /opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/xml/ParametersGEV.xml
 sudo touch /opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/xml/ParametersU3V.xml
+END NO.
+
+That was old.
+
+Now, you need to:
+source /opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/bin/set_puregev_env

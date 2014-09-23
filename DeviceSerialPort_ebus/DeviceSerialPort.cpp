@@ -40,7 +40,6 @@ void Sleep(int a){
 
 //agb added these...
 #define PV_GUI_NOT_AVAILABLE
-#define UART0
 //
 // Shows how to use a PvDeviceSerialPort to write data to an IP engine and continuously read it back
 // (with the IP engine serial port set in loop back mode).
@@ -83,6 +82,8 @@ bool TestSerialCommunications()
     if ( !lResult.IsOK() )
     {
         cout << "Unable to connect to " << lDeviceInfo->GetDisplayID().GetAscii() << endl;
+	cout << lResult.GetCodeString().GetAscii() << endl;
+	cout << lResult.GetDescription().GetAscii() << endl;
         return false;
     }
 
@@ -103,7 +104,7 @@ bool TestSerialCommunications()
 	lParams->SetBooleanValue( "Uart0Loopback", true );
 #endif
 #ifdef BULK0
-	lParams->SetEnumValue( "BulkSelector", "Bulk1" );
+	lParams->SetEnumValue( "BulkSelector", "Bulk4" );
 	lParams->SetEnumValue( "BulkMode", "UART" );
 	lParams->SetEnumValue( "BulkBaudRate", SPEED );
 	lParams->SetEnumValue( "BulkNumOfStopBits", STOPBITS );
@@ -119,7 +120,7 @@ bool TestSerialCommunications()
 	lResult = lPort.Open( lDeviceAdapter, PvDeviceSerial0 );
 #endif // UART0
 #ifdef BULK0
-	lResult = lPort.Open( lDeviceAdapter, PvDeviceSerialBulk1 );
+	lResult = lPort.Open( lDeviceAdapter, PvDeviceSerialBulk4 );
 #endif // BULK0
 	if ( !lResult.IsOK() )
 	{
