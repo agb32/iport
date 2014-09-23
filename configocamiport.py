@@ -123,7 +123,7 @@ cameraParams[7*ncam+2+(namelen+3)//4]=0#record timestamp
 
 rmx=numpy.random.random((nacts,ncents)).astype("f")
 ab=numpy.array([1056,121]).astype("i").byteswap()
-camCommand="DigitizedImageWidth=%d;DigitizedImageHeight=%d;TestPattern=Off;GevStreamThroughputLimit=1075773440;R[0x0d04]=8164;R[0x12650]=7"%(ab[0],ab[1])
+camCommand="DigitizedImageWidth=%d;DigitizedImageHeight=%d;TestPattern=Off;GevStreamThroughputLimit=1075773440;R[0x0d04]=8000;R[0x12650]=7;"%(ab[0],ab[1])
 #GevStreamThroughputLimit=1075773440 #8000 Mbps byteswapped.
 #GevSCPSPacketSize=9000 doesn't seem settable - so set via reg instead:
 #R[0x0d04]=9000  #Note, this-36 bytes of data sent per packet.  Default on switchon is 576 (540 bytes).  Seems to be set to 8164 by the eBUSPlayer - so probably use this!
