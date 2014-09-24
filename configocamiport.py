@@ -141,7 +141,7 @@ camCommand="DigitizedImageWidth=%d;DigitizedImageHeight=%d;TestPattern=Off;GevSt
 reorder=numpy.zeros((264*242,),numpy.int32)
 for i in range(npxlx[0]*npxly[0]):
     pxl=i//8#the pixel within a given quadrant
-    if((pxl%66>5 && pxl<66*120)):#not an overscan pixel
+    if((pxl%66>5) and (pxl<66*120)):#not an overscan pixel
         amp=i%8#the amplifier (quadrant) in question    
         rl=1-i%2#right to left
         tb=1-amp//4#top to bottom amp (0,1,2,3)?
