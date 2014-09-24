@@ -120,7 +120,7 @@ cameraParams[3*ncam:4*ncam]=0#y offset
 cameraParams[4*ncam:5*ncam]=1056#npxlx
 cameraParams[5*ncam:6*ncam]=121#npxly
 cameraParams[6*ncam:7*ncam]=1#byteswapInt (1 for ocam)
-cameraParams[7*ncam:8*ncam]=3#reorder (2 or 3 for the ocam, 0 for no reordering)
+cameraParams[7*ncam:8*ncam]=4#reorder (2 or 3 for the ocam, 0 for no reordering)
 cameraParams[8*ncam:9*ncam]=50#priority
 cameraParams[9*ncam]=1#affin el size
 cameraParams[9*ncam+1:10*ncam+1]=0xfc0fc0#affinity
@@ -136,6 +136,19 @@ camCommand="DigitizedImageWidth=%d;DigitizedImageHeight=%d;TestPattern=Off;GevSt
 #R[0x0d04]=9000  #Note, this-36 bytes of data sent per packet.  Default on switchon is 576 (540 bytes).  Seems to be set to 8164 by the eBUSPlayer - so probably use this!
 #SensorDigitizationTaps=Eight  - doesn't work - need to set the register:
 #[0x12650]=7  #Sets SensorDigitizationTaps to Eight
+
+
+reorder=numpy.zeros((264*242,),numpy.int32)
+for i in range(npxlx[0]*npxly[0]):
+    pxl=i//8#the pixel within a given quadrant
+    if((pxl%66>5 && pxl<66*120)):#not an overscan pixel
+        amp=i%8#the amplifier (quadrant) in question    
+        rl=1-i%2#right to left
+        tb=1-amp//4#top to bottom amp (0,1,2,3)?
+        x=(tb*2-1)*(((1-2*rl)*(pxl%66-6)+rl*59)+60*amp)+(1-tb)*(60*8-1)
+        y=(1-tb)*239+(2*tb-1)*(pxl//66)
+        j=y*264+x;
+        reorder[i]=j
 
 
 
@@ -228,6 +241,7 @@ control={
     "maxAdapOffset":0,
     "version":" "*120,
     #"lastActs":numpy.zeros((nacts,),numpy.uint16),
+    "camReorder4":reorder,
     }
 if camCommand!=None:
     for i in range(ncam):
