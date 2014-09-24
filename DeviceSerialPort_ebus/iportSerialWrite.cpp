@@ -104,7 +104,7 @@ bool TestSerialCommunications(char *cmd)
 	lParams->SetBooleanValue( "Uart0Loopback", true );
 #endif
 #ifdef BULK0
-	lParams->SetEnumValue( "BulkSelector", "Bulk0" );
+	lParams->SetEnumValue( "BulkSelector", "Bulk0" );//Bulk0 is cameralink, bulk4 is gpio.
 	lParams->SetEnumValue( "BulkMode", "UART" );
 	lParams->SetEnumValue( "BulkBaudRate", SPEED );
 	lParams->SetEnumValue( "BulkNumOfStopBits", STOPBITS );
