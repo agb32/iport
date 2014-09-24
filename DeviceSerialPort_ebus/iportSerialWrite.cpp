@@ -138,7 +138,7 @@ bool TestSerialCommunications(char *cmd)
     uint32_t lSize = strlen(cmd)+2;
     // Allocate test buffers
     lInBuffer = new uint8_t[ lSize ];
-    lOutBuffer = new uint8_t[ lSize ];
+    lOutBuffer = new uint8_t[ lSize+1 ];
     
     // Fill input buffer
     for ( uint32_t i = 0; i < lSize-2; i++ )
@@ -189,6 +189,10 @@ bool TestSerialCommunications(char *cmd)
       }
     
     cout <<"Sent:" << lBytesWritten << " Received:" <<lTotalBytesRead <<endl;
+    if (lTotalBytesRead<=lSize){
+      lOutBuffer[lTotalBytesRead]='\0';
+      cout << "Received: "<< lOutBuffer << endl;
+    }
     // Validate answer
     if ( lTotalBytesRead != lBytesWritten )
       {
