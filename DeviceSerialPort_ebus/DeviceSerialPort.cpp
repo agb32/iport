@@ -104,7 +104,7 @@ bool TestSerialCommunications()
 	lParams->SetBooleanValue( "Uart0Loopback", true );
 #endif
 #ifdef BULK0
-	lParams->SetEnumValue( "BulkSelector", "Bulk4" );
+	lParams->SetEnumValue( "BulkSelector", "Bulk0" );//Bulk0 is cameralink, bulk4 is gpio.
 	lParams->SetEnumValue( "BulkMode", "UART" );
 	lParams->SetEnumValue( "BulkBaudRate", SPEED );
 	lParams->SetEnumValue( "BulkNumOfStopBits", STOPBITS );
@@ -120,7 +120,7 @@ bool TestSerialCommunications()
 	lResult = lPort.Open( lDeviceAdapter, PvDeviceSerial0 );
 #endif // UART0
 #ifdef BULK0
-	lResult = lPort.Open( lDeviceAdapter, PvDeviceSerialBulk4 );
+	lResult = lPort.Open( lDeviceAdapter, PvDeviceSerialBulk0 );
 #endif // BULK0
 	if ( !lResult.IsOK() )
 	{
