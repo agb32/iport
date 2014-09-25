@@ -1,6 +1,7 @@
 """Sends a serial command via darc..."""
 
 import sys
+import string
 import numpy
 import darc
 
@@ -41,7 +42,7 @@ def sendCmd(cmd,prefix="",cam=0):
     #d.Set("aravisMem",a.view(numpy.int32))
 
 
-"""Required commands:
+txt="""Selection of available commands:
 cooling 20
 fps 5         00 00 00 00 00 00 00 07 66 70 73 20 35 0d 0a 00
 fps 50        00 00 00 00 00 00 00 08 66 70 73 20 35 30 0d 0a
@@ -81,7 +82,27 @@ shutter step #ns (delay in ns added to each frame shutter starting position when
 shutter end #ns (time limit in ns that will reset the sweep)
 shutter count #n Number of sequential pulses to fire in burst mode.
 
+synchro on   switch to externally triggered mode (frame rate).  Low value 
+             triggers a frame transfer and readout (so if it remains low, 
+             will operate at 1.5kHz).
+synchro off  switch back to internal triggering.
 
-
-
+--prefix=WHATEVER
+--cam=DARC CAM NUMBER
 """
+if __name__=="__main__":
+    prefix=""
+    cam=0
+    if len(sys.argv)>1:
+        cmdlist=list(sys.argv[1:])
+        for cmd in cmdlist:
+            if cmd.startswith("--prefix="):
+                cmdlist.remove(cmd)
+                prefix=cmd[9:]
+            elif cmd.startswith("--cam="):
+                cmdlist.remove(cmd)
+                cam=int(cmd[6:])
+        cmd=string.join(cmdlist," ")
+        sendCmd(cmd,prefix,cam)
+    else:
+        print txt
