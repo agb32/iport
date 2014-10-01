@@ -1,0 +1,16 @@
+To get working on darc@canary:
+modprobe myri10ge
+
+I think this is now loaded by default - put an entry in
+/etc/modules-load.d
+However, systemctl status systemd-modules-load.service isn't too
+convincing!
+
+dmesg - reported that the new interface (the 10G card) was p1p1
+
+system-config-network
+Added p1p1 as 192.168.1.1
+
+ifup p1p1
+
+Then hopefully, arv-tool will find it...
