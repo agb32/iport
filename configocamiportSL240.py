@@ -228,7 +228,7 @@ control={
     "clearErrors":0,
     "camerasOpen":1,
     "camerasFraming":1,
-    "cameraName":"libcamSL240AravisNOSL240.so",#"camfile",
+    "cameraName":"libcamSL240Aravis.so",#"camfile",
     "cameraParams":cameraParams,
     "mirrorName":"libmirror.so",
     "mirrorParams":None,
