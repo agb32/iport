@@ -91,10 +91,18 @@ synchro off  switch back to internal triggering.
 
 --prefix=WHATEVER
 --cam=DARC CAM NUMBER
+
+
+Or:
+
+setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout+extra optionally to delay for LGS height) CameraFrameRate
 """
 
 def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
-    """Sets up parameters for laser freq, with exposure time exptime (in us) and camera frame rate frate, and delay from start of frame transfer of delay (in us).
+    """Sets up parameters for laser freq, 
+    with exposure time exptime (in us) 
+    and camera frame rate frate, 
+    and delay from start of frame transfer of delay (in us).
     """
     period=(1./laserfreq)*1e9
     frameperiod=(1./frate)*1e9
@@ -129,7 +137,18 @@ if __name__=="__main__":
             elif cmd.startswith("--cam="):
                 cmdlist.remove(cmd)
                 cam=int(cmd[6:])
-        cmd=string.join(cmdlist," ")
-        sendCmd(cmd,prefix,cam)
+
+        if cmdlist[0]=="setup":
+            if len(cmdlist)!=5:
+                print "Usage: %s setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout) CameraFrameRate"%sys.argv[0]
+            else:
+                laserfreq=float(cmdlist[1])
+                shuttertime=float(cmdlist[2])
+                delay=float(cmdlist[3])
+                framerate=float(cmdlist[4])
+                prepareShutter(laserfreq,shuttertime,delay,framerate,prefix=prefix,cam=cam)
+        else:
+            cmd=string.join(cmdlist," ")
+            sendCmd(cmd,prefix,cam)
     else:
         print txt
