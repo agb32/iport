@@ -93,29 +93,29 @@ synchro off  switch back to internal triggering.
 --cam=DARC CAM NUMBER
 """
 
-def prepareShutter(laserfreq,exptime,delay,frate,on=1):
+def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
     """Sets up parameters for laser freq, with exposure time exptime (in us) and camera frame rate frate, and delay from start of frame transfer of delay (in us).
     """
     period=(1./laserfreq)*1e9
     frameperiod=(1./frate)*1e9
-    sendCmd("shutter off")
+    sendCmd("shutter off",prefix,cam)
     time.sleep(0.05)
-    sendCmd("shutter internal")
+    sendCmd("shutter internal",prefix,cam)
     time.sleep(0.05)
-    sendCmd("shutter burst")
+    sendCmd("shutter burst",prefix,cam)
     time.sleep(0.05)
-    sendCmd("shutter pulse %d"%int(exptime*1000))
+    sendCmd("shutter pulse %d"%int(exptime*1000),prefix,cam)
     time.sleep(0.05)
     bl=int(period-int(exptime*1000))
-    sendCmd("shutter blanking %d"%bl)
+    sendCmd("shutter blanking %d"%bl,prefix,cam)
     time.sleep(0.05)
-    sendCmd("shutter position %d"%int(delay*1000))
+    sendCmd("shutter position %d"%int(delay*1000),prefix,cam)
     time.sleep(0.05)
     n=int(frameperiod-int(delay*1000))//(bl+int(exptime*1000))
-    sendCmd("shutter count %d"%n)
+    sendCmd("shutter count %d"%n,prefix,cam)
     time.sleep(0.05)
     if on:
-        sendCmd("shutter on")
+        sendCmd("shutter on",prefix,cam)
 
 if __name__=="__main__":
     prefix=""
