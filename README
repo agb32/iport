@@ -14,3 +14,8 @@ Added p1p1 as 192.168.1.1
 ifup p1p1
 
 Then hopefully, arv-tool will find it...
+
+
+Setting ocam parameters via the iport - use
+DeviceSerialPort_ebus/iportSerial.py for a python module that sets via
+darc, or use iportSerialWrite when darc isn't running.
