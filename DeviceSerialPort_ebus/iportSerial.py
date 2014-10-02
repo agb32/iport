@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """Sends a serial command via darc..."""
 
 import sys
