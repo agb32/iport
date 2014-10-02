@@ -12,7 +12,7 @@ def sendCmd(cmd,prefix="",cam=0):
     4 bytes for number of characters following
     The characters
     Padding up to 4 bytes"""
-    print cmd
+    print "%s (cam %d)"%(cmd,cam)
     d=darc.Control(prefix)
     if cmd[-2:]!="\r\n":
         cmd=cmd+"\r\n"
@@ -130,14 +130,17 @@ if __name__=="__main__":
     cam=0
     if len(sys.argv)>1:
         cmdlist=list(sys.argv[1:])
+        newlist=[]
         for cmd in cmdlist:
             if cmd.startswith("--prefix="):
-                cmdlist.remove(cmd)
+                #cmdlist.remove(cmd)
                 prefix=cmd[9:]
             elif cmd.startswith("--cam="):
-                cmdlist.remove(cmd)
+                #cmdlist.remove(cmd)
                 cam=int(cmd[6:])
-
+            else:
+                newlist.append(cmd)
+        cmdlist=newlist
         if cmdlist[0]=="setup":
             if len(cmdlist)!=5:
                 print "Usage: %s setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout) CameraFrameRate"%sys.argv[0]
