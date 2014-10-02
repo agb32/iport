@@ -1,3 +1,6 @@
+install:
+	cp iportSerial.py /Canary/bin/
+
 iportSerialWrite: iportSerialWrite.cpp eBusDeviceAdapter.cpp ebusDeviceAdapter.h
 	g++ -D_UNIX_ iportSerialWrite.cpp eBusDeviceAdapter.cpp -o iportSerialWrite -I/opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/include -L/opt/pleora/ebus_sdk/Ubuntu-12.04-x86_64/lib -lPvBase -lPtUtilsLib -lPvDevice -lPvStream -lPvGenICam -lPvSerial -lPvGUI 
 
