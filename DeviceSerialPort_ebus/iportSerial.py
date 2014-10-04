@@ -95,12 +95,16 @@ synchro off  switch back to internal triggering.
 
 
 Or:
-
 setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout+extra optionally to delay for LGS height) CameraFrameRate --prefix=main --cam=2
 
 or:
+shutter off --prefix=main --cam=2
 
+or:
 cool -45 --prefix=main --cam=2
+
+(note, use cool 20 and wait for a bit before doing cooling off, or powering off).
+
 """
 
 def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
