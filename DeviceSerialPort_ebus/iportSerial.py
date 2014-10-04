@@ -96,7 +96,11 @@ synchro off  switch back to internal triggering.
 
 Or:
 
-setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout+extra optionally to delay for LGS height) CameraFrameRate
+setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout+extra optionally to delay for LGS height) CameraFrameRate --prefix=main --cam=2
+
+or:
+
+cool -45 --prefix=main --cam=2
 """
 
 def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
@@ -126,6 +130,13 @@ def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
     if on:
         sendCmd("shutter on",prefix,cam)
 
+def coolCamera(temp,prefix="",cam=0):
+    sendCmd("cooling reset",prefix,cam)
+    time.sleep(0.2)
+    sendCmd("cooling %d"%temp,prefix,cam)
+    time.sleep(0.2)
+    sendCmd("cooling on",prefix,cam)
+
 if __name__=="__main__":
     prefix=""
     cam=0
@@ -151,6 +162,12 @@ if __name__=="__main__":
                 delay=float(cmdlist[3])
                 framerate=float(cmdlist[4])
                 prepareShutter(laserfreq,shuttertime,delay,framerate,prefix=prefix,cam=cam)
+        elif cmdlist[0]=="cool":
+            if len(cmdlist)!=2:
+                print "Usage: %s cool TEMP"%sys.argv[0]
+            else:
+                temp=float(cmdlist[1])
+                coolCamera(temp,prefix=prefix,cam=cam)
         else:
             cmd=string.join(cmdlist," ")
             sendCmd(cmd,prefix,cam)
