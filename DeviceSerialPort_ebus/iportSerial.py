@@ -18,18 +18,18 @@ def sendCmd(cmd,prefix="",cam=0):
     d=darc.Control(prefix)
     if cmd[-2:]!="\r\n":
         cmd=cmd+"\r\n"
-        l=len(cmd)
-        a=numpy.zeros((4+(l+3)//4,),numpy.uint32)
-        a[0]=cam
-        a[1]=0x40058000 #the address
-        a[2]=0
-        a[3]=l
-        a[3]=a[3].byteswap()
-        cmd+="\0"*((4-l%4)%4)
-        a[4:]=numpy.fromstring(cmd,dtype=numpy.uint32)
-        for i in a:
-            print hex(i)
-            d.Set("aravisMem",a.view(numpy.int32))
+    l=len(cmd)
+    a=numpy.zeros((4+(l+3)//4,),numpy.uint32)
+    a[0]=cam
+    a[1]=0x40058000 #the address
+    a[2]=0
+    a[3]=l
+    a[3]=a[3].byteswap()
+    cmd+="\0"*((4-l%4)%4)
+    a[4:]=numpy.fromstring(cmd,dtype=numpy.uint32)
+    for i in a:
+        print hex(i)
+    d.Set("aravisMem",a.view(numpy.int32))
 
     #Now, I think the message has to and with 0x093e02 (byteswapped), and has to be preceeded by 0x09  (and maybe some extra zeros as well).
     #So, work backwards from the end of the message...
