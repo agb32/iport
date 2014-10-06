@@ -2,6 +2,7 @@
 """Sends a serial command via darc..."""
 
 import sys
+import os
 import string
 import time
 import numpy
@@ -17,18 +18,18 @@ def sendCmd(cmd,prefix="",cam=0):
     d=darc.Control(prefix)
     if cmd[-2:]!="\r\n":
         cmd=cmd+"\r\n"
-    l=len(cmd)
-    a=numpy.zeros((4+(l+3)//4,),numpy.uint32)
-    a[0]=cam
-    a[1]=0x40058000 #the address
-    a[2]=0
-    a[3]=l
-    a[3]=a[3].byteswap()
-    cmd+="\0"*((4-l%4)%4)
-    a[4:]=numpy.fromstring(cmd,dtype=numpy.uint32)
-    for i in a:
-        print hex(i)
-    d.Set("aravisMem",a.view(numpy.int32))
+        l=len(cmd)
+        a=numpy.zeros((4+(l+3)//4,),numpy.uint32)
+        a[0]=cam
+        a[1]=0x40058000 #the address
+        a[2]=0
+        a[3]=l
+        a[3]=a[3].byteswap()
+        cmd+="\0"*((4-l%4)%4)
+        a[4:]=numpy.fromstring(cmd,dtype=numpy.uint32)
+        for i in a:
+            print hex(i)
+            d.Set("aravisMem",a.view(numpy.int32))
 
     #Now, I think the message has to and with 0x093e02 (byteswapped), and has to be preceeded by 0x09  (and maybe some extra zeros as well).
     #So, work backwards from the end of the message...
@@ -95,8 +96,19 @@ synchro off  switch back to internal triggering.
 
 
 Or:
+setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout+extra optionally to delay for LGS height) CameraFrameRate --prefix=main --cam=2
 
-setup LaserFreq ShutterOpenTime(us) ShutterDelay(us - 666 to avoid readout+extra optionally to delay for LGS height) CameraFrameRate
+or:
+shutter off --prefix=main --cam=2
+
+or:
+cool -45 --prefix=main --cam=2
+
+(note, use cool 20 and wait for a bit before doing cooling off, or powering off).
+
+or:
+gui  (to run the gui)
+
 """
 
 def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
@@ -108,23 +120,228 @@ def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
     period=(1./laserfreq)*1e9
     frameperiod=(1./frate)*1e9
     sendCmd("shutter off",prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     sendCmd("shutter internal",prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     sendCmd("shutter burst",prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     sendCmd("shutter pulse %d"%int(exptime*1000),prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     bl=int(period-int(exptime*1000))
     sendCmd("shutter blanking %d"%bl,prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     sendCmd("shutter position %d"%int(delay*1000),prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     n=int(frameperiod-int(delay*1000))//(bl+int(exptime*1000))
     sendCmd("shutter count %d"%n,prefix,cam)
-    time.sleep(0.05)
+    time.sleep(0.1)
     if on:
         sendCmd("shutter on",prefix,cam)
+
+def coolCamera(temp,prefix="",cam=0):
+    sendCmd("cooling reset",prefix,cam)
+    time.sleep(0.2)
+    sendCmd("cooling %d"%temp,prefix,cam)
+    time.sleep(0.2)
+    sendCmd("cooling on",prefix,cam)
+
+
+
+class OcamGUI:
+    def __init__(self,w=None):
+        import socket
+        self.prefix="main"
+        self.cam=2
+        self.countdown=None
+        if w==None:
+            self.win=gtk.Window()
+            self.win.set_title("OcamGUI FOR CANARY ON %s"%socket.gethostname())
+            self.win.connect("delete-event",self.quit)
+        else:
+            self.win=w
+        self.vbox=gtk.VBox()
+        self.win.add(self.vbox)
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        h.pack_start(gtk.Label("OCAM control GUI"),False)
+        e=gtk.Entry()
+        e.set_text("main")
+        e.set_tooltip_text("darc instance")
+        e.set_width_chars(5)
+        e.connect("focus-out-event",self.setPrefix)
+        h.pack_start(e,False)
+        e=gtk.Entry()
+        e.set_text("2")
+        e.set_tooltip_text("camera number within darc")
+        e.set_width_chars(2)
+        e.connect("focus-out-event",self.setCam)
+        h.pack_start(e,False)
+
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Set FPS")
+        b.set_tooltip_text("Set the OCAM Frames Per Second")
+        h.pack_start(b,False)
+        e=gtk.Entry()
+        e.set_text("150")
+        e.set_width_chars(4)
+        e.set_tooltip_text("Frame rate in Hz")
+        efps=e
+        h.pack_start(e,False)
+        b.connect("clicked",self.setFps,e)
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Shutter off")
+        b.set_tooltip_text("Turn shuttering off")
+        b.connect("clicked",self.shutter,"off")
+        h.pack_start(b,False)
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Shutter on")
+        b.set_tooltip_text("Turn on shuttering with the specified frequency, shutter-open-time, delay and framerate (specified above)")
+        h.pack_start(b,False)
+        e=gtk.Entry()
+        e.set_text("10000")
+        e.set_tooltip_text("Laser frequency, Hz")
+        e.set_width_chars(5)
+        h.pack_start(e,False)
+        e2=gtk.Entry()
+        e2.set_text("3")
+        e2.set_tooltip_text("Shutter open time, us")
+        e2.set_width_chars(3)
+        h.pack_start(e2,False)
+        e3=gtk.Entry()
+        e3.set_text("666")
+        e3.set_tooltip_text("Shutter delay, us (should be greater than the readout time to avoid image artifacts, i.e. about 665.339).")
+        e3.set_width_chars(3)
+        h.pack_start(e3,False)
+        l=gtk.Label("150")
+        h.pack_start(l,False)
+        efps.connect("focus-out-event",self.setFpsLabel,l)
+        b.connect("clicked",self.shutter,(e,e2,e3,efps))
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Cooling")
+        b.set_tooltip_text("Set camera cooling to specified temperature")
+        h.pack_start(b,False)
+        e=gtk.Entry()
+        e.set_text("-45")
+        e.set_tooltip_text("Cooling temperature (eg -45)")
+        e.set_width_chars(3)
+        h.pack_start(e,False)
+        bw=gtk.Button("Warm up")
+        bw.set_tooltip_text("Start the camera warming back up (takes about 10 minutes)")
+        h.pack_start(bw,False)
+        bc=gtk.Button("Cooling off")
+        self.coolOffButton=bc
+        bc.set_tooltip_text("Turn off the cooling system (WARNING: May result in thermal shock.  Only click this after you've started the camera warming).  Will become active 10 minutes after clicking 'warm up'")
+
+        h.pack_start(bc,False)
+        bc.connect("clicked",self.cool,"Cooler off",bc)
+        bw.connect("clicked",self.cool,"warm",bc)
+        b.connect("clicked",self.cool,e,bc)
+        bc.set_sensitive(False)
+
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Geng freq:")
+        b.set_tooltip_text("Set the frequency of the laser pulses (spartan 3 board).  Requires ssh access to root@darc")
+        h.pack_start(b,False)
+        e=gtk.Entry()
+        e.set_text("10000")
+        e.set_width_chars(5)
+        h.pack_start(e,False)
+        b.connect("clicked",self.setTrigFreq,e)
+
+        self.win.show_all()
+        
+
+    def quit(self,w,a=None):
+        gtk.mainquit()
+
+    def setFps(self,w,e=None):
+        fps=int(e.get_text())
+        print fps,self.cam,self.prefix
+        sendCmd("fps %d"%fps,self.prefix,self.cam)
+    def setFpsLabel(self,w,e=None,l=None):
+        l.set_text(w.get_text())
+    def setCam(self,w,a=None):
+        self.cam=int(w.get_text())
+    def setPrefix(self,w,a=None):
+        self.prefix=w.get_text().strip()
+    def shutter(self,w,a=None):
+        if a=="off":
+            print "Shutter off"
+            sendCmd("shutter off",self.prefix,self.cam)
+        else:
+            lfreq=float(a[0].get_text())
+            opentime=float(a[1].get_text())
+            delay=float(a[2].get_text())
+            fps=int(a[3].get_text())
+            print lfreq,opentime,delay,fps
+            prepareShutter(lfreq,opentime,delay,fps,prefix=self.prefix,cam=self.cam)
+    def setCountdown(self):
+        rt=False
+        bc=self.coolOffButton
+        if self.countdown!=None and self.countdown>0:
+            self.countdown-=1
+            if self.countdown==0:
+                bc.set_sensitive(True)
+                bc.set_tooltip_text("Turn off the cooling system (WARNING: May result in thermal shock.  Only click this after you've started the camera warming).")
+            else:
+                bc.set_tooltip_text("Turn off the cooling system (WARNING: May result in thermal shock.  Only click this after you've started the camera warming).  Will become active in %d seconds"%self.countdown)
+                rt=True
+        return rt
+
+    def cool(self,w,a,b):
+        if a=="warm":
+            print "Warming"
+            self.countdown=600
+            self.setCountdown()
+            gobject.timeout_add(1000,self.setCountdown)
+            coolCamera(20,self.prefix,self.cam)
+        elif a=="Cooler off":
+            print "Cooler off"
+            sendCmd("cooling off",self.prefix,self.cam)
+        else:
+            temp=int(a.get_text())
+            print "Cooling to %g"%temp
+            b.set_sensitive(False)
+            self.countdown=None
+            b.set_tooltip_text("Turn off the cooling system (WARNING: May result in thermal shock.  Only click this after you've started the camera warming).  Will become active 10 minutes after clicking 'warm up'")
+            coolCamera(temp,self.prefix,self.cam)
+    def setTrigFreq(self,w,e):
+        import subprocess
+        import traceback
+        freq=int(e.get_text())
+        result=""
+        cmd="ssh root@darc python /root/git/ocamtrig/setupScript.py %d"%freq
+        try:
+            result = subprocess.check_output([cmd], stderr=subprocess.STDOUT,shell=True)
+        except subprocess.CalledProcessError, e:
+            traceback.print_exc()
+            print e.output
+        except:
+            traceback.print_exc()
+        print result
+
+def runGUI():
+    import gtk
+    global gtk
+    import gobject
+    global gobject
+    try:
+        sys.path.append("/home/ali/git/canaryLaserCommissioning")
+        import myStdout
+    except:
+        print "Could not import myStdout"
+        myStdout=None
+    g=OcamGUI()
+    if myStdout!=None:
+        m=myStdout.MyStdout(g.vbox)
+        m.sw.set_size_request(10,60)
+
+    gtk.main()
 
 if __name__=="__main__":
     prefix=""
@@ -151,6 +368,14 @@ if __name__=="__main__":
                 delay=float(cmdlist[3])
                 framerate=float(cmdlist[4])
                 prepareShutter(laserfreq,shuttertime,delay,framerate,prefix=prefix,cam=cam)
+        elif cmdlist[0]=="cool":
+            if len(cmdlist)!=2:
+                print "Usage: %s cool TEMP"%sys.argv[0]
+            else:
+                temp=float(cmdlist[1])
+                coolCamera(temp,prefix=prefix,cam=cam)
+        elif cmdlist[0]=="gui":
+            runGUI()
         else:
             cmd=string.join(cmdlist," ")
             sendCmd(cmd,prefix,cam)
