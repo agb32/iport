@@ -2,6 +2,7 @@
 """Sends a serial command via darc..."""
 
 import sys
+import os
 import string
 import time
 import numpy
@@ -241,6 +242,17 @@ class OcamGUI:
         b.connect("clicked",self.cool,e,bc)
         bc.set_sensitive(False)
 
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Geng freq:")
+        b.set_tooltip_text("Set the frequency of the laser pulses (spartan 3 board).  Requires ssh access to root@darc")
+        h.pack_start(b,False)
+        e=gtk.Entry()
+        e.set_text("10000")
+        e.set_width_chars(5)
+        h.pack_start(e,False)
+        b.connect("clicked",self.setTrigFreq,e)
+
         self.win.show_all()
         
 
@@ -281,8 +293,6 @@ class OcamGUI:
                 rt=True
         return rt
 
-
-
     def cool(self,w,a,b):
         if a=="warm":
             print "Warming"
@@ -300,6 +310,21 @@ class OcamGUI:
             self.countdown=None
             b.set_tooltip_text("Turn off the cooling system (WARNING: May result in thermal shock.  Only click this after you've started the camera warming).  Will become active 10 minutes after clicking 'warm up'")
             coolCamera(temp,self.prefix,self.cam)
+    def setTrigFreq(self,w,e):
+        import subprocess
+        import traceback
+        freq=int(e.get_text())
+        result=""
+        cmd="ssh root@darc python /root/git/ocamtrig/setupScript.py %d"%freq
+        try:
+            result = subprocess.check_output([cmd], stderr=subprocess.STDOUT,shell=True)
+        except subprocess.CalledProcessError, e:
+            traceback.print_exc()
+            print e.output
+        except:
+            traceback.print_exc()
+        print result
+
 def runGUI():
     import gtk
     global gtk
@@ -309,11 +334,13 @@ def runGUI():
         sys.path.append("/home/ali/git/canaryLaserCommissioning")
         import myStdout
     except:
+        print "Could not import myStdout"
         myStdout=None
     g=OcamGUI()
     if myStdout!=None:
-        myStdout.MyStdout(g.vbox)
-        
+        m=myStdout.MyStdout(g.vbox)
+        m.sw.set_size_request(10,60)
+
     gtk.main()
 
 if __name__=="__main__":
