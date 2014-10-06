@@ -316,13 +316,16 @@ class OcamGUI:
         freq=int(e.get_text())
         result=""
         cmd="ssh root@darc python /root/git/ocamtrig/setupScript.py %d"%freq
-        try:
-            result = subprocess.check_output([cmd], stderr=subprocess.STDOUT,shell=True)
-        except subprocess.CalledProcessError, e:
-            traceback.print_exc()
-            print e.output
-        except:
-            traceback.print_exc()
+        # try:
+        #     result = subprocess.check_output([cmd], stderr=subprocess.STDOUT,shell=True)
+        # except subprocess.CalledProcessError, e:
+        #     traceback.print_exc()
+        #     print e.output
+        # except:
+        #     traceback.print_exc()
+        p=subprocess.Popen(cmd,stderr=subprocess.STDOUT,stdout=subprocess.PIPE,shell=True)
+        result=p.stdout.read()
+
         print result
 
 def runGUI():
