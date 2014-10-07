@@ -273,6 +273,8 @@ class OcamGUI:
         if a=="off":
             print "Shutter off"
             sendCmd("shutter off",self.prefix,self.cam)
+            d=darc.Control(self.prefix)
+            d.Set("ocamShutter",0)#for reference only
         else:
             lfreq=float(a[0].get_text())
             opentime=float(a[1].get_text())
@@ -280,6 +282,9 @@ class OcamGUI:
             fps=int(a[3].get_text())
             print lfreq,opentime,delay,fps
             prepareShutter(lfreq,opentime,delay,fps,prefix=self.prefix,cam=self.cam)
+            d=darc.Control(self.prefix)
+            #and for reference (only)...
+            d.Set("ocamShutter",numpy.array([lfreq,opentime,delay,fps]).astype("f"))
     def setCountdown(self):
         rt=False
         bc=self.coolOffButton
