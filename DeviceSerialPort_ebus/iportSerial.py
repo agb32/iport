@@ -120,21 +120,21 @@ def prepareShutter(laserfreq,exptime,delay,frate,on=1,prefix="",cam=0):
     period=(1./laserfreq)*1e9
     frameperiod=(1./frate)*1e9
     sendCmd("shutter off",prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     sendCmd("shutter internal",prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     sendCmd("shutter burst",prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     sendCmd("shutter pulse %d"%int(exptime*1000),prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     bl=int(period-int(exptime*1000))
     sendCmd("shutter blanking %d"%bl,prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     sendCmd("shutter position %d"%int(delay*1000),prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     n=int(frameperiod-int(delay*1000))//(bl+int(exptime*1000))
     sendCmd("shutter count %d"%n,prefix,cam)
-    time.sleep(0.1)
+    time.sleep(0.5)
     if on:
         sendCmd("shutter on",prefix,cam)
 
