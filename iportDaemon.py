@@ -30,19 +30,24 @@ udp packet to port 4 that says:
 
 
 """
-
+import sys
+import numpy
+import socket
+import darc
 def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=2):
     sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     sock.bind((ip,0))
     port=sock.getsockname()[1]
+    print "Bound on port %d.  Sending initial data"%port
     initdata=numpy.array([0x42,0x00,0x00,0x80,0x00,0x04,0x00,0x01,0x00,0x00,0x0a,0x00]).astype(numpy.uint8)
     sock.sendto(initdata,(ipiport,4))
-    d=darc.Control("main")
+    d=darc.Control(prefix)
     ipdata=numpy.zeros((4,),numpy.uint8)
     ipdata[:]=map(int,ip.split("."))
     ipstr=hex(ipdata.view(numpy.uint32).byteswap()[0])
     if ipstr[-1]=="L":
         ipstr=ipstr[:-1]
+    print "Setting aravisCmd%d - then waiting for data"%cam
     d.Set("aravisCmd%d"%cam,"R[0xb00]=%d;R[0xb10]=%s;R[0xb14]=0x190;R[0xb18]=0x3;"%(port,ipstr))
     while 1:
         data,addr=sock.recvfrom(1024)
@@ -57,6 +62,13 @@ def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=2):
 
 
 if __name__=="__main__":
-    main()
+    prefix="main"
+    if len(sys.argv)>1:
+        prefix=sys.argv[1]
+    if prefix=="ocam":
+        cam=0
+    else:
+        cam=2
+    main(prefix=prefix,cam=cam)
 
 

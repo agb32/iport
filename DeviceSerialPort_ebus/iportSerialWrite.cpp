@@ -138,7 +138,7 @@ bool TestSerialCommunications(char *cmd)
     uint32_t lSize = strlen(cmd)+2;
     // Allocate test buffers
     lInBuffer = new uint8_t[ lSize ];
-    lOutBuffer = new uint8_t[ lSize+1 ];
+    lOutBuffer = new uint8_t[ lSize>1500?lSize+1:1501 ];
     
     // Fill input buffer
     for ( uint32_t i = 0; i < lSize-2; i++ )
@@ -151,6 +151,7 @@ bool TestSerialCommunications(char *cmd)
     // Send the buffer content on the serial port
     uint32_t lBytesWritten = 0;
     lResult = lPort.Write( lInBuffer, lSize, lBytesWritten );
+    //Wait for a while (while testing wireshark packets)
     if ( !lResult.IsOK() )
       {
 	// Unable to send data over serial port!
@@ -171,34 +172,41 @@ bool TestSerialCommunications(char *cmd)
     // whether it is on some sort of EOF or length. You should pump out data until you
     // have what you are waiting for or reach some timeout.
     //
+    //Not sure we know how large the return data should be.  So, initially, do a big read...
+
     cout << "Reading bytes" <<endl;
     uint32_t lTotalBytesRead = 0;
-    while ( lTotalBytesRead < lBytesWritten )
+    uint32_t lBytesRead = 0;
+    uint32_t reqsize=1500;//initial request
+    while ( lTotalBytesRead < lBytesWritten)
       {
-	uint32_t lBytesRead = 0;
-	lResult = lPort.Read( lOutBuffer + lTotalBytesRead, lSize - lTotalBytesRead, lBytesRead, 100 );
+	lResult = lPort.Read( lOutBuffer + lTotalBytesRead, reqsize - lTotalBytesRead, lBytesRead, 100 );
+	reqsize=lSize;
 	if ( lResult.GetCode() == PvResult::Code::TIMEOUT )
 	  {
 	    cout << "Timeout" << endl;
 	    break;
 	  }
-	cout << "Read " <<lBytesRead <<"bytes" <<endl;
+	cout << "Read " <<lBytesRead <<" bytes" <<endl;
 	// Increments read head
 	lTotalBytesRead += lBytesRead;
 	Sleep(100);
       }
     
     cout <<"Sent:" << lBytesWritten << " Received:" <<lTotalBytesRead <<endl;
-    if (lTotalBytesRead<=lSize){
+    if (lTotalBytesRead<=(lSize>1500?lSize:1500)){
       lOutBuffer[lTotalBytesRead]='\0';
       cout << "Received: "<< lOutBuffer << endl;
     }
+    /*lBytesWritten=0;
+    lResult = lPort.Write( lInBuffer, lSize, lBytesWritten );
+    lBytesWritten=0;
+    lResult = lPort.Write( lInBuffer, lSize, lBytesWritten );*/
+
     // Validate answer
-    if ( lTotalBytesRead != lBytesWritten )
-      {
 	// Did not receive all expected bytes
-	cout << "Only received " << lTotalBytesRead << " out of " << lBytesWritten << " bytes" << endl;
-      }
+    cout << "Received " << lTotalBytesRead << " bytes" << endl;
+	/*      }
     else
       {
 	// Compare input and output buffers
@@ -213,7 +221,7 @@ bool TestSerialCommunications(char *cmd)
 	
 	// Display error count
 	cout << "Error count: " << lErrorCount << endl;
-      }
+	}*/
     
     delete []lInBuffer; 
     lInBuffer = NULL;
