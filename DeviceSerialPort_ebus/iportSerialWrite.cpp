@@ -182,7 +182,7 @@ bool TestSerialCommunications(char *cmd)
 	    cout << "Timeout" << endl;
 	    break;
 	  }
-	
+	cout << "Read " <<lBytesRead <<"bytes" <<endl;
 	// Increments read head
 	lTotalBytesRead += lBytesRead;
 	Sleep(100);
