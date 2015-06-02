@@ -43,7 +43,7 @@ def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=2):
     ipstr=hex(ipdata.view(numpy.uint32).byteswap()[0])
     if ipstr[-1]=="L":
         ipstr=ipstr[:-1]
-    d.Set("aravisCmd%d"%cam,"R[0xb00]=%d;R[0xb10]=%s;R[0xb14]=0x190;R[0xb18]=0x3;"%(port,ipstr))
+    d.Set("aravisCmd%d"%cam,"R[0xb14]=0x190;R[0xb18]=0x3;R[0xb10]=%s;R[0xb00]=%d;R[0x20017800]=0x0;R[0x20017814]=0x6;R[0x2001781c]=0x0;R[0x20017818]=0x0;R[0x20017830]=0x0;R[0x16000]=0x1;"%(ipstr,port))
     while 1:
         data,addr=sock.recvfrom(1024)
         print "Got data %s from %s"%(str(data),str(addr))
