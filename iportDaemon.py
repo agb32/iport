@@ -48,9 +48,12 @@ def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=2):
     if ipstr[-1]=="L":
         ipstr=ipstr[:-1]
     d.Set("aravisCmd%d"%cam,"R[0xb14]=0x190;R[0xb18]=0x3;R[0xb10]=%s;R[0xb00]=%d;R[0x20017800]=0x0;R[0x20017814]=0x6;R[0x2001781c]=0x0;R[0x20017818]=0x0;R[0x20017830]=0x0;R[0x16000]=0x1;"%(ipstr,port))
+    vhex=numpy.vectorize(hex)
     while 1:
         data,addr=sock.recvfrom(1024)
         print "Got data %s from %s"%(str(data),str(addr))
+        print vhex(numpy.fromstring(data,dtype=numpy.uint8))
+        print data[28:]
         if addr[0]==ipiport and addr[1]==4:
             data=numpy.fromstring(data,dtype=numpy.uint8)
             packet=numpy.zeros((8,),numpy.uint8)
@@ -58,7 +61,7 @@ def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=2):
             packet[6:8]=data[6:8]
             sock.sendto(packet,(ipiport,4))
             print "Sent response:",packet
-
+            print vhex(packet)
 
 if __name__=="__main__":
     prefix="main"
