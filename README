@@ -19,3 +19,33 @@ Then hopefully, arv-tool will find it...
 Setting ocam parameters via the iport - use
 DeviceSerialPort_ebus/iportSerial.py for a python module that sets via
 darc, or use iportSerialWrite when darc isn't running.
+
+
+
+Messages to/from iport:
+In order to send commands to the camera over cameralink serial, these
+commands are sent to the ocam.
+
+So, iportSerial.py sets aravisMem to something.
+
+It then appears that the iport sends a command by UDP to a port given
+in register 0xb00.
+
+The iport sdk then responds to this.
+
+See /root/wiresharkocam* on darc for captures.
+
+Ok, so, what I need is a little daemon.  What this does is:
+Opens a listening port (for UDP packets).
+Sends: 
+
+0x420000800004000100000a00 to port 4 on the ocam.
+Sets register 0xb00 to the port number that is listening on.
+Sets reg 0xb10 to the host IP. eg 0xc0a80101
+Reg 0xb14 to 0x190  (transmission timeout in ms)
+REg 0xb18 to 0x3 (number of retransmissions allowed)
+Then, whenever it receives a 36 byte UDP data packet from port 4 of
+ocam, takes byte 8 (or maybe bytes 7 and 8...) and then replies with a
+udp packet to port 4 that says:
+0x000000c30000XXXX  where XXXX is bytes 7 and 8.
+
