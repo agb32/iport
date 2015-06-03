@@ -179,6 +179,20 @@ class OcamGUI:
 
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
+        b=gtk.Button("External trig")
+        b.set_tooltip_text("Start external triggering (synchro on)")
+        h.pack_start(b,False)
+        b.connect("clicked",self.trigger,1)
+        b=gtk.Button("Internal")
+        b.set_tooltip_text("Start internal triggering (synchro off)")
+        h.pack_start(b,False)
+        b.connect("clicked",self.trigger,0)
+        h=gtk.HBox()
+        self.vbox.pack_start(h,False)
+        b=gtk.Button("Shutter off")
+        b.set_tooltip_text("Turn shuttering off")
+        b.connect("clicked",self.shutter,"off")
+        h.pack_start(b,False)
         b=gtk.Button("Set FPS")
         b.set_tooltip_text("Set the OCAM Frames Per Second")
         h.pack_start(b,False)
@@ -189,12 +203,6 @@ class OcamGUI:
         efps=e
         h.pack_start(e,False)
         b.connect("clicked",self.setFps,e)
-        h=gtk.HBox()
-        self.vbox.pack_start(h,False)
-        b=gtk.Button("Shutter off")
-        b.set_tooltip_text("Turn shuttering off")
-        b.connect("clicked",self.shutter,"off")
-        h.pack_start(b,False)
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
         b=gtk.Button("Shutter on")
@@ -246,12 +254,21 @@ class OcamGUI:
         self.vbox.pack_start(h,False)
         b=gtk.Button("Geng freq:")
         b.set_tooltip_text("Set the frequency of the laser pulses (spartan 3 board).  Requires ssh access to root@darc")
+        b.set_sensitive(False)
         h.pack_start(b,False)
         e=gtk.Entry()
         e.set_text("10000")
-        e.set_width_chars(5)
+        e.set_width_chars(4)
         h.pack_start(e,False)
         b.connect("clicked",self.setTrigFreq,e)
+        b=gtk.ToggleButton("Blockonread")
+        b.set_tooltip_text("Set block on read option (closes shutter during readout")
+        h.pack_start(b,False)
+        b.connect("toggled",self.blockOnRead)
+        b=gtk.ToggleButton("Correct glitch")
+        b.set_tooltip_text("Do on-the-fly bias correction")
+        h.pack_start(b,False)
+        b.connect("toggled",self.correctGlitch)
 
         self.win.show_all()
         
@@ -269,6 +286,18 @@ class OcamGUI:
         self.cam=int(w.get_text())
     def setPrefix(self,w,a=None):
         self.prefix=w.get_text().strip()
+
+    def trigger(self,w,exttrig=1):
+        if exttrig:
+            sendCmd("synchro on",self.prefix,self.cam)
+        else:
+            sendCmd("synchro off",self.prefix,self.cam)
+    def blockOnRead(self,w,a=None):
+        sendCmd("shutter blockonread %d"%w.get_active(),self.prefix,self.cam)
+
+    def correctGlitch(self,w,a=None):
+        sendCmd("shutter correctglitch %d"%w.get_active(),self.prefix,self.cam)
+
     def shutter(self,w,a=None):
         if a=="off":
             print "Shutter off"
