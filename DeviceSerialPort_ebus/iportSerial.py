@@ -161,6 +161,7 @@ class OcamGUI:
             self.win=w
         self.vbox=gtk.VBox()
         self.win.add(self.vbox)
+        self.vbox.pack_start(gtk.Label("\nPlease ensure iportDaemon.py is running!\n(on darc)"))
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
         h.pack_start(gtk.Label("OCAM control GUI"),False)
