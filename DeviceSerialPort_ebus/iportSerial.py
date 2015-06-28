@@ -188,11 +188,19 @@ class OcamGUI:
         b.set_tooltip_text("Start internal triggering (synchro off)")
         h.pack_start(b,False)
         b.connect("clicked",self.trigger,0)
+        b=gtk.Button("Temp")
+        b.set_tooltip_text("Send the temp command (see iportDaemon output for the actual temperatures)")
+        h.pack_start(b,False)
+        b.connect("clicked",self.cool,"get",None)
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
         b=gtk.Button("Shutter off")
         b.set_tooltip_text("Turn shuttering off")
         b.connect("clicked",self.shutter,"off")
+        h.pack_start(b,False)
+        b=gtk.Button("Shutter external")
+        b.set_tooltip_text("Shutter on external signal")
+        b.connect("clicked",self.shutter,"external")
         h.pack_start(b,False)
         b=gtk.Button("Set FPS")
         b.set_tooltip_text("Set the OCAM Frames Per Second")
@@ -231,7 +239,7 @@ class OcamGUI:
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
         b=gtk.Button("Cooling")
-        b.set_tooltip_text("Set camera cooling to specified temperature")
+        b.set_tooltip_text("Set camera cooling to specified temperature (-45 recommended)")
         h.pack_start(b,False)
         e=gtk.Entry()
         e.set_text("-45")
@@ -305,6 +313,10 @@ class OcamGUI:
             sendCmd("shutter off",self.prefix,self.cam)
             d=darc.Control(self.prefix)
             d.Set("ocamShutter",0)#for reference only
+        elif a=="external":
+            sendCmd("shutter external",self.prefix,self.cam)
+            d=darc.Control(self.prefix)
+            d.Set("ocamShutter",1)#reference only
         else:
             lfreq=float(a[0].get_text())
             opentime=float(a[1].get_text())
@@ -338,6 +350,8 @@ class OcamGUI:
         elif a=="Cooler off":
             print "Cooler off"
             sendCmd("cooling off",self.prefix,self.cam)
+        elif a=="get":
+            sendCmd("temp",self.prefix,self.cam)
         else:
             temp=int(a.get_text())
             print "Cooling to %g"%temp
