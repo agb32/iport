@@ -315,6 +315,7 @@ class OcamGUI:
             d.Set("ocamShutter",0)#for reference only
         elif a=="external":
             sendCmd("shutter external",self.prefix,self.cam)
+            sendCmd("shutter on",self.prefix,cam)
             d=darc.Control(self.prefix)
             d.Set("ocamShutter",1)#reference only
         else:
