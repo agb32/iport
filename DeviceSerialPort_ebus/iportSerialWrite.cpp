@@ -29,8 +29,8 @@ void Sleep(int a){
 }
 #endif
 
-//#define UART0
-#define BULK0
+//#define UART0//for NuVu
+//#define BULK0//for iPORT OCAM
 
 #define SPEED ( "Baud115200" )
 #define STOPBITS ( "One" )
