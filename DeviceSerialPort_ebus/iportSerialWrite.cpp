@@ -101,7 +101,7 @@ bool TestSerialCommunications(char *cmd)
 	lParams->SetEnumValue( "Uart0Parity", PARITY );
 
 	// For this test to work without attached serial hardware we enable the port loop back
-	lParams->SetBooleanValue( "Uart0Loopback", true );
+	lParams->SetBooleanValue( "Uart0Loopback", false );
 #endif
 #ifdef BULK0
 	lParams->SetEnumValue( "BulkSelector", "Bulk0" );//Bulk0 is cameralink, bulk4 is gpio.
