@@ -29,8 +29,8 @@ void Sleep(int a){
 }
 #endif
 
-//#define UART0
-#define BULK0
+//#define UART0//Now defined in Makefile.  This one for Nuvu
+//#define BULK0 //This one for ocam iport
 
 #define SPEED ( "Baud9600" )
 #define STOPBITS ( "One" )
