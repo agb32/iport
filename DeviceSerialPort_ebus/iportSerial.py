@@ -172,7 +172,7 @@ class OcamGUI:
         e.connect("focus-out-event",self.setPrefix)
         h.pack_start(e,False)
         e=gtk.Entry()
-        e.set_text("2")
+        e.set_text("4")
         e.set_tooltip_text("camera number within darc")
         e.set_width_chars(2)
         e.connect("focus-out-event",self.setCam)

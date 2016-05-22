@@ -70,7 +70,7 @@ if __name__=="__main__":
     if prefix=="ocam":
         cam=0
     else:
-        cam=2
+        cam=4
     main(prefix=prefix,cam=cam)
 
 
