@@ -151,7 +151,7 @@ class OcamGUI:
     def __init__(self,w=None):
         import socket
         self.prefix="main"
-        self.cam=2
+        self.cam=4
         self.countdown=None
         if w==None:
             self.win=gtk.Window()
@@ -166,13 +166,13 @@ class OcamGUI:
         self.vbox.pack_start(h,False)
         h.pack_start(gtk.Label("OCAM control GUI"),False)
         e=gtk.Entry()
-        e.set_text("main")
+        e.set_text(self.prefix)
         e.set_tooltip_text("darc instance")
         e.set_width_chars(5)
         e.connect("focus-out-event",self.setPrefix)
         h.pack_start(e,False)
         e=gtk.Entry()
-        e.set_text("2")
+        e.set_text("%d"%self.cam)
         e.set_tooltip_text("camera number within darc")
         e.set_width_chars(2)
         e.connect("focus-out-event",self.setCam)

@@ -34,7 +34,7 @@ import sys
 import numpy
 import socket
 import darc
-def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=2):
+def main(ip="192.168.1.1",ipiport="192.168.1.10",prefix="main",cam=4):
     sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
     sock.bind((ip,0))
     port=sock.getsockname()[1]
@@ -70,7 +70,7 @@ if __name__=="__main__":
     if prefix=="ocam":
         cam=0
     else:
-        cam=2
+        cam=4
     main(prefix=prefix,cam=cam)
 
 
