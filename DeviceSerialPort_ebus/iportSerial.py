@@ -56,6 +56,8 @@ gain 1        00 00 00 00 00 00 00 08 67 61 69 6e 20 31 0d 0a
 gain 10
 gain 100
 gain 1000
+vss 0    - new NIMO clocking.  Note, gain must be set to 1 first.
+vss 2500 - old IMO clocking.  Note, gain must be set to 1 first.
 test on       00 00 00 00 00 00 00 09 74 65 73 74 20 6f 6e 0d 0a 45 9c 03
 test off      00 00 00 00 00 00 00 0a 74 65 73 74 20 6f 66 66 0d 0a 14 04
 led on
@@ -192,6 +194,10 @@ class OcamGUI:
         b.set_tooltip_text("Send the temp command (see iportDaemon output for the actual temperatures)")
         h.pack_start(b,False)
         b.connect("clicked",self.cool,"get",None)
+        t=gtk.ToggleButton("New mode")
+        t.set_tooltip_text("Set the CCD to operate in NIMO mode")
+        h.pack_start(t,False)
+        t.connect("toggled",self.nimo)
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
         b=gtk.Button("Shutter off")
@@ -378,6 +384,19 @@ class OcamGUI:
 
         print result
 
+    def nimo(self,w):
+        if w.get_active():
+            print "Setting NIMO (new) mode (and turning gain to 1)"
+            sendCmd("gain 1",self.prefix,self.cam)
+            sendCmd("gain 1",self.prefix,self.cam)
+            sendCmd("vss 0",self.prefix,self.cam)
+
+        else:
+            print "Setting IMO (old) mode (and turning gain to 1)"
+            sendCmd("gain 1",self.prefix,self.cam)
+            sendCmd("gain 1",self.prefix,self.cam)
+            sendCmd("vss 2500",self.prefix,self.cam)
+        
 def runGUI():
     import gtk
     global gtk
