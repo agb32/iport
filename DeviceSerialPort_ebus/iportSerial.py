@@ -201,7 +201,7 @@ class OcamGUI:
         h=gtk.HBox()
         self.vbox.pack_start(h,False)
         b=gtk.Button("Shutter off")
-        b.set_tooltip_text("Turn shuttering off")
+        b.set_tooltip_text("Turn shuttering off.  Also sends a shutter blockonread 0 as a bug fix (email from J-L Gach 8th Sept 2017)")
         b.connect("clicked",self.shutter,"off")
         h.pack_start(b,False)
         b=gtk.Button("Shutter external")
@@ -317,6 +317,7 @@ class OcamGUI:
         if a=="off":
             print "Shutter off"
             sendCmd("shutter off",self.prefix,self.cam)
+            sendCmd("shutter blockonread 0",self.prefix,self.cam)
             d=darc.Control(self.prefix)
             d.Set("ocamShutter",0)#for reference only
         elif a=="external":
